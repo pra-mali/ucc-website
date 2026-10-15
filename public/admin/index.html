@@ -1,0 +1,381 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="noindex, nofollow" />
+  <title>UCC Admin</title>
+  <link rel="icon" href="/favicon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+Devanagari:wght@400;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --orange:#f7941d; --magenta:#ec008c; --sky:#00aeef; --ink:#141414; --ink-2:#3b3b3b; --muted:#6b6b6b;
+      --line:#e3e3e3; --bg:#f5f5f6; --card:#ffffff; --danger:#c62828; --ok:#1b8f3a; --radius:12px;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root:not([data-theme="light"]) { --ink:#f1f1f1; --ink-2:#d2d2d2; --muted:#9d9d9d; --line:#2b2b2b; --bg:#0f0f10; --card:#1a1a1c; }
+    }
+    :root[data-theme="dark"] { --ink:#f1f1f1; --ink-2:#d2d2d2; --muted:#9d9d9d; --line:#2b2b2b; --bg:#0f0f10; --card:#1a1a1c; }
+    * { box-sizing: border-box; }
+    body { margin:0; font-family: Inter, system-ui, 'Noto Sans Devanagari', sans-serif; font-size:15px; color:var(--ink); background:var(--bg); }
+    a { color: var(--sky); }
+    .stripe { height:5px; background: linear-gradient(90deg, var(--orange) 0 33.3%, var(--magenta) 33.3% 66.6%, var(--sky) 66.6% 100%); }
+    header { display:flex; align-items:center; justify-content:space-between; gap:12px; padding:10px 16px; background:var(--card); border-bottom:1px solid var(--line); position:sticky; top:0; z-index:5; }
+    header img { height:40px; }
+    header .who { font-size:0.85rem; color:var(--muted); display:flex; gap:12px; align-items:center; }
+    main { max-width:1180px; margin:0 auto; padding:16px; }
+    .card { background:var(--card); border:1px solid var(--line); border-radius:var(--radius); padding:20px; }
+    h1 { font-size:1.4rem; margin:0 0 6px; } h2 { font-size:1.1rem; margin:0 0 12px; }
+    label { display:block; font-weight:600; font-size:0.85rem; margin:12px 0 4px; }
+    input, select, textarea { width:100%; font:inherit; color:var(--ink); background:var(--bg); border:1px solid var(--line); border-radius:8px; padding:9px 11px; }
+    textarea { min-height:360px; resize:vertical; font-family: ui-monospace, 'Cascadia Mono', Consolas, monospace; font-size:0.9rem; line-height:1.5; }
+    input:focus, textarea:focus, select:focus { outline:2px solid var(--sky); outline-offset:1px; }
+    .btn { display:inline-flex; align-items:center; gap:6px; padding:9px 16px; border-radius:999px; border:1px solid var(--ink); background:var(--ink); color:var(--bg); font:inherit; font-weight:700; font-size:0.9rem; cursor:pointer; }
+    .btn:hover { opacity:0.9; } .btn:disabled { opacity:0.5; cursor:default; }
+    .btn-primary { background:var(--orange); border-color:var(--orange); color:#111; }
+    .btn-outline { background:transparent; color:var(--ink); }
+    .btn-danger { background:transparent; border-color:var(--danger); color:var(--danger); }
+    .btn-sm { padding:6px 12px; font-size:0.82rem; }
+    .row { display:flex; gap:12px; flex-wrap:wrap; align-items:center; }
+    .grid-2 { display:grid; grid-template-columns:1fr 1fr; gap:0 16px; }
+    .editor { display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-top:8px; }
+    .preview { background:var(--bg); border:1px solid var(--line); border-radius:8px; padding:16px 20px; overflow:auto; max-height:70vh; line-height:1.6; }
+    .preview img { max-width:100%; border-radius:8px; } .preview h1,.preview h2,.preview h3 { line-height:1.2; }
+    .muted { color:var(--muted); } .small { font-size:0.85rem; }
+    .msg { padding:10px 14px; border-radius:8px; margin:12px 0; font-size:0.9rem; }
+    .msg-ok { background:rgba(27,143,58,.12); color:var(--ok); } .msg-err { background:rgba(198,40,40,.12); color:var(--danger); }
+    table { width:100%; border-collapse:collapse; font-size:0.92rem; }
+    th, td { text-align:left; padding:10px 8px; border-bottom:1px solid var(--line); vertical-align:middle; }
+    th { font-size:0.78rem; letter-spacing:.06em; text-transform:uppercase; color:var(--muted); }
+    tr:hover td { background:rgba(0,174,239,.05); }
+    .chip { display:inline-block; font-size:0.7rem; font-weight:700; letter-spacing:.05em; text-transform:uppercase; padding:2px 8px; border-radius:999px; background:var(--bg); border:1px solid var(--line); margin-right:4px; }
+    .chip-draft { background:rgba(247,148,29,.15); color:#b86306; border-color:transparent; }
+    .chip-wp { background:rgba(0,174,239,.12); color:#0077a8; border-color:transparent; }
+    .toolbar { display:flex; gap:4px; flex-wrap:wrap; margin:6px 0; }
+    .toolbar button { font:inherit; font-size:0.8rem; padding:4px 9px; border:1px solid var(--line); background:var(--card); color:var(--ink); border-radius:6px; cursor:pointer; }
+    .toolbar button:hover { border-color:var(--sky); }
+    .login { max-width:420px; margin:48px auto; }
+    .login input { font-size:1rem; }
+    .hidden { display:none !important; }
+    .cover-prev { max-height:120px; border-radius:8px; margin-top:6px; }
+    .spinner { display:inline-block; width:14px; height:14px; border:2px solid currentColor; border-right-color:transparent; border-radius:50%; animation:spin .7s linear infinite; vertical-align:-2px; }
+    @keyframes spin { to { transform:rotate(360deg); } }
+    @media (max-width: 860px) { .editor, .grid-2 { grid-template-columns:1fr; } .preview { max-height:none; } header .who span.email { display:none; } }
+  </style>
+</head>
+<body>
+<div class="stripe"></div>
+<header>
+  <a href="/" title="Open the website"><img src="/logo-horizontal.png" alt="UCC" /></a>
+  <strong>Admin · Stories</strong>
+  <div class="who" id="who"></div>
+</header>
+<main>
+  <!-- LOGIN -->
+  <section id="view-login" class="card login hidden">
+    <h1>Sign in</h1>
+    <p class="muted small">Password plus the 6-digit code from your authenticator app.</p>
+    <form id="login-form" autocomplete="on">
+      <label for="l-email">Email</label>
+      <input id="l-email" type="email" required autocomplete="username" value="udaipurcyclingclub@gmail.com" />
+      <label for="l-pass">Password</label>
+      <input id="l-pass" type="password" required autocomplete="current-password" />
+      <label for="l-code">Authenticator code</label>
+      <input id="l-code" inputmode="numeric" pattern="[0-9 ]{6,7}" maxlength="7" required autocomplete="one-time-code" placeholder="123 456" />
+      <div id="login-msg"></div>
+      <div class="row" style="margin-top:16px"><button class="btn btn-primary" id="login-btn" type="submit">Sign in</button></div>
+    </form>
+  </section>
+
+  <!-- LIST -->
+  <section id="view-list" class="hidden">
+    <div class="row" style="justify-content:space-between; margin-bottom:14px">
+      <h1 style="margin:0">Stories</h1>
+      <div class="row">
+        <button class="btn btn-outline btn-sm" id="refresh-btn" type="button">Refresh</button>
+        <button class="btn btn-primary" id="new-btn" type="button">+ New story</button>
+      </div>
+    </div>
+    <div id="list-msg"></div>
+    <div class="card" style="padding:0 8px">
+      <table id="posts-table"><thead><tr><th>Title</th><th>Date</th><th>Categories</th><th></th></tr></thead><tbody></tbody></table>
+      <p id="list-empty" class="muted hidden" style="padding:16px">No stories yet.</p>
+    </div>
+    <p class="muted small" style="margin-top:12px">Stories marked <span class="chip chip-wp">WordPress</span> were imported from the old site and can only be edited <a href="https://github.com/pra-mali/ucc-website/tree/main/src/content/stories" target="_blank" rel="noopener">on GitHub</a>.</p>
+  </section>
+
+  <!-- EDITOR -->
+  <section id="view-edit" class="hidden">
+    <div class="row" style="justify-content:space-between; margin-bottom:14px">
+      <h1 style="margin:0" id="edit-title">New story</h1>
+      <div class="row"><button class="btn btn-outline btn-sm" id="back-btn" type="button">← Back to list</button></div>
+    </div>
+    <div id="edit-msg"></div>
+    <form id="edit-form" class="card">
+      <div class="grid-2">
+        <div>
+          <label for="f-title">Title</label>
+          <input id="f-title" required placeholder="Udaipur to Kumbhalgarh in a day" />
+        </div>
+        <div>
+          <label for="f-slug">URL slug <span class="muted">(udaipurcycling.club/<b>slug</b>/)</span></label>
+          <input id="f-slug" required pattern="[a-z0-9]+(-[a-z0-9]+)*" placeholder="kumbhalgarh-ride-2026" />
+        </div>
+        <div>
+          <label for="f-date">Date</label>
+          <input id="f-date" type="date" required />
+        </div>
+        <div>
+          <label for="f-cats">Categories <span class="muted">(comma separated)</span></label>
+          <input id="f-cats" list="cat-list" placeholder="Cycling Expedition, Story" />
+          <datalist id="cat-list"></datalist>
+        </div>
+        <div>
+          <label for="f-author">Author</label>
+          <input id="f-author" value="Team UCC" />
+        </div>
+        <div>
+          <label for="f-cover">Cover image</label>
+          <div class="row">
+            <input id="f-cover" placeholder="/uploads/photo.jpg" style="flex:1" />
+            <label class="btn btn-outline btn-sm" style="margin:0"><input type="file" id="f-cover-file" accept="image/*" class="hidden" />Upload…</label>
+          </div>
+          <img id="cover-prev" class="cover-prev hidden" alt="" />
+        </div>
+      </div>
+      <label for="f-excerpt">Short summary <span class="muted">(shown on the story card)</span></label>
+      <input id="f-excerpt" maxlength="300" placeholder="Eighty riders, one fort, and a lot of climbing." />
+
+      <label>Story <span class="muted">(Markdown)</span></label>
+      <div class="toolbar">
+        <button type="button" data-md="bold">Bold</button>
+        <button type="button" data-md="italic">Italic</button>
+        <button type="button" data-md="h2">Heading</button>
+        <button type="button" data-md="h3">Sub-heading</button>
+        <button type="button" data-md="quote">Quote</button>
+        <button type="button" data-md="ul">List</button>
+        <button type="button" data-md="link">Link</button>
+        <label style="margin:0;display:inline"><input type="file" id="f-inline-file" accept="image/*" multiple class="hidden" /><button type="button" id="inline-img-btn">Insert image…</button></label>
+        <span id="upload-status" class="muted small"></span>
+      </div>
+      <div class="editor">
+        <textarea id="f-body" required placeholder="Write the story here. Blank line between paragraphs. Use the buttons above for headings, bold, links and images."></textarea>
+        <div class="preview" id="preview"><p class="muted">Preview appears here as you type.</p></div>
+      </div>
+      <div class="row" style="justify-content:space-between; margin-top:16px">
+        <label class="row small" style="margin:0; font-weight:500"><input type="checkbox" id="f-draft" style="width:auto" /> Save as draft (not shown on the site)</label>
+        <div class="row">
+          <button class="btn btn-danger btn-sm hidden" id="delete-btn" type="button">Delete</button>
+          <button class="btn btn-primary" id="save-btn" type="submit">Publish</button>
+        </div>
+      </div>
+    </form>
+    <p class="muted small" style="margin-top:12px">Publishing commits to GitHub and Render rebuilds the site. The story appears on the website about a minute later.</p>
+  </section>
+</main>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/marked/15.0.12/marked.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.2.6/purify.min.js"></script>
+<script>
+(() => {
+  // API base: the UCC backend on Render. Override with ?api=http://localhost:3000 for local testing.
+  const API = new URLSearchParams(location.search).get('api') || localStorage.getItem('ucc-cms-api') || 'https://uccapp-backend-8kxg.onrender.com';
+  try { if (new URLSearchParams(location.search).get('api')) localStorage.setItem('ucc-cms-api', API); } catch {}
+  const $ = (id) => document.getElementById(id);
+  const views = { login: $('view-login'), list: $('view-list'), edit: $('view-edit') };
+  let token = null, posts = [], current = null;
+  try { token = sessionStorage.getItem('ucc-cms-token'); } catch {}
+
+  const show = (name) => { Object.entries(views).forEach(([k, el]) => el.classList.toggle('hidden', k !== name)); window.scrollTo(0, 0); };
+  const msg = (id, text, ok) => { $(id).innerHTML = text ? `<div class="msg ${ok ? 'msg-ok' : 'msg-err'}">${text}</div>` : ''; };
+  const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+
+  async function api(path, opts = {}) {
+    const headers = { 'Content-Type': 'application/json', ...(token ? { Authorization: `Bearer ${token}` } : {}) };
+    let res;
+    try { res = await fetch(API + path, { ...opts, headers, body: opts.body ? JSON.stringify(opts.body) : undefined }); }
+    catch (e) { throw new Error('Cannot reach the server. If it was asleep, wait 30 seconds and try again.'); }
+    const data = await res.json().catch(() => ({}));
+    if (res.status === 401 && path !== '/cms/login') { logout(); throw new Error('Session expired, please sign in again.'); }
+    if (!res.ok || data.success === false) throw new Error(data.error || `Request failed (${res.status})`);
+    return data;
+  }
+  function logout() { token = null; try { sessionStorage.removeItem('ucc-cms-token'); } catch {} $('who').innerHTML = ''; show('login'); }
+
+  // ---- login
+  $('login-form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const btn = $('login-btn'); btn.disabled = true; btn.innerHTML = '<span class="spinner"></span> Signing in';
+    msg('login-msg', '');
+    try {
+      const d = await api('/cms/login', { method: 'POST', body: { email: $('l-email').value, password: $('l-pass').value, code: $('l-code').value } });
+      token = d.token; try { sessionStorage.setItem('ucc-cms-token', token); } catch {}
+      $('l-pass').value = ''; $('l-code').value = '';
+      await enter(d.email);
+    } catch (err) { msg('login-msg', esc(err.message)); }
+    btn.disabled = false; btn.textContent = 'Sign in';
+  });
+
+  async function enter(email) {
+    $('who').innerHTML = `<span class="email">${esc(email)}</span><button class="btn btn-outline btn-sm" id="logout-btn" type="button">Sign out</button>`;
+    $('logout-btn').addEventListener('click', logout);
+    show('list');
+    await loadList();
+  }
+
+  // ---- list
+  async function loadList(refresh = false) {
+    msg('list-msg', '');
+    const tbody = $('posts-table').querySelector('tbody');
+    tbody.innerHTML = '<tr><td colspan="4" class="muted"><span class="spinner"></span> Loading stories from GitHub…</td></tr>';
+    try {
+      const d = await api('/cms/posts' + (refresh ? '?refresh=1' : ''));
+      posts = d.posts;
+      tbody.innerHTML = posts.map((p) => `
+        <tr>
+          <td><strong>${esc(p.title)}</strong><br><span class="muted small">/${esc(p.slug)}/</span></td>
+          <td>${esc(p.date)}</td>
+          <td>${p.draft ? '<span class="chip chip-draft">Draft</span>' : ''}${p.editable ? '' : '<span class="chip chip-wp">WordPress</span>'}${p.categories.map((c) => `<span class="chip">${esc(c)}</span>`).join('')}</td>
+          <td style="white-space:nowrap">
+            <a class="btn btn-outline btn-sm" href="https://udaipurcycling.club/${encodeURIComponent(p.slug)}/" target="_blank" rel="noopener">View</a>
+            ${p.editable ? `<button class="btn btn-sm" data-edit="${esc(p.slug)}" type="button">Edit</button>` : ''}
+          </td>
+        </tr>`).join('');
+      $('list-empty').classList.toggle('hidden', posts.length > 0);
+      tbody.querySelectorAll('[data-edit]').forEach((b) => b.addEventListener('click', () => openEdit(b.dataset.edit)));
+      const cats = await api('/cms/categories').catch(() => ({ categories: [] }));
+      $('cat-list').innerHTML = (cats.categories || []).map((c) => `<option value="${esc(c)}">`).join('');
+    } catch (err) { tbody.innerHTML = ''; msg('list-msg', esc(err.message)); }
+  }
+  $('refresh-btn').addEventListener('click', () => loadList(true));
+  $('new-btn').addEventListener('click', () => openEdit(null));
+  $('back-btn').addEventListener('click', () => { show('list'); });
+
+  // ---- editor
+  function fill(p) {
+    current = p;
+    $('edit-title').textContent = p ? `Edit: ${p.title}` : 'New story';
+    $('f-title').value = p ? p.title : '';
+    $('f-slug').value = p ? p.slug : '';
+    $('f-slug').disabled = !!p;
+    $('f-date').value = p ? p.date : new Date().toISOString().slice(0, 10);
+    $('f-cats').value = p ? p.categories.join(', ') : '';
+    $('f-author').value = p ? p.author : 'Team UCC';
+    $('f-cover').value = p ? (p.cover || '') : '';
+    $('f-excerpt').value = p ? p.excerpt : '';
+    $('f-body').value = p ? p.body : '';
+    $('f-draft').checked = p ? p.draft : false;
+    $('delete-btn').classList.toggle('hidden', !p);
+    $('save-btn').textContent = p ? 'Save changes' : 'Publish';
+    coverPreview(); renderPreview();
+    msg('edit-msg', '');
+    show('edit');
+  }
+  async function openEdit(slug) {
+    if (!slug) return fill(null);
+    msg('list-msg', '');
+    try { const d = await api(`/cms/posts/${encodeURIComponent(slug)}`); fill(d.post); }
+    catch (err) { msg('list-msg', esc(err.message)); }
+  }
+  $('f-title').addEventListener('input', () => {
+    if (current) return;
+    $('f-slug').value = $('f-title').value.toLowerCase().normalize('NFKD').replace(/[^\x00-\x7F]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '').slice(0, 80);
+  });
+  const coverPreview = () => { const v = $('f-cover').value.trim(); const img = $('cover-prev'); img.classList.toggle('hidden', !v); img.src = v ? (v.startsWith('/') ? 'https://udaipurcycling.club' + v : v) : ''; };
+  $('f-cover').addEventListener('input', coverPreview);
+
+  const renderPreview = () => {
+    const md = $('f-body').value;
+    const html = window.marked ? marked.parse(md, { gfm: true, breaks: false }) : esc(md);
+    const safe = window.DOMPurify ? DOMPurify.sanitize(html) : html;
+    $('preview').innerHTML = (safe.trim() ? safe : '<p class="muted">Preview appears here as you type.</p>').replace(/src="\/uploads\//g, 'src="https://udaipurcycling.club/uploads/');
+  };
+  let t; $('f-body').addEventListener('input', () => { clearTimeout(t); t = setTimeout(renderPreview, 150); });
+
+  function wrap(before, after = before, placeholder = 'text') {
+    const ta = $('f-body'); const s = ta.selectionStart, e = ta.selectionEnd;
+    const sel = ta.value.slice(s, e) || placeholder;
+    ta.setRangeText(before + sel + after, s, e, 'select'); ta.focus(); renderPreview();
+  }
+  function linePrefix(prefix) {
+    const ta = $('f-body'); const s = ta.selectionStart;
+    const lineStart = ta.value.lastIndexOf('\n', s - 1) + 1;
+    ta.setRangeText(prefix, lineStart, lineStart, 'end'); ta.focus(); renderPreview();
+  }
+  document.querySelectorAll('.toolbar [data-md]').forEach((b) => b.addEventListener('click', () => {
+    const k = b.dataset.md;
+    if (k === 'bold') wrap('**'); else if (k === 'italic') wrap('*');
+    else if (k === 'h2') linePrefix('## '); else if (k === 'h3') linePrefix('### ');
+    else if (k === 'quote') linePrefix('> '); else if (k === 'ul') linePrefix('- ');
+    else if (k === 'link') wrap('[', '](https://)', 'link text');
+  }));
+
+  // ---- uploads
+  const readFile = (file) => new Promise((res, rej) => { const r = new FileReader(); r.onload = () => res(r.result); r.onerror = rej; r.readAsDataURL(file); });
+  async function upload(file) {
+    if (file.size > 6 * 1024 * 1024) throw new Error(`${file.name} is larger than 6 MB. Resize it first.`);
+    const data = await readFile(file);
+    try { return await api('/cms/upload', { method: 'POST', body: { filename: file.name, data } }); }
+    catch (err) {
+      if (/already exists/.test(err.message) && confirm(`${err.message}\n\nReplace the existing image?`)) return api('/cms/upload', { method: 'POST', body: { filename: file.name, data, overwrite: true } });
+      throw err;
+    }
+  }
+  $('f-cover-file').addEventListener('change', async (e) => {
+    const f = e.target.files[0]; if (!f) return;
+    $('upload-status').innerHTML = '<span class="spinner"></span> Uploading cover…';
+    try { const d = await upload(f); $('f-cover').value = d.path; coverPreview(); $('upload-status').textContent = 'Cover uploaded.'; }
+    catch (err) { msg('edit-msg', esc(err.message)); $('upload-status').textContent = ''; }
+    e.target.value = '';
+  });
+  $('inline-img-btn').addEventListener('click', () => $('f-inline-file').click());
+  $('f-inline-file').addEventListener('change', async (e) => {
+    const files = [...e.target.files]; if (!files.length) return;
+    for (const f of files) {
+      $('upload-status').innerHTML = `<span class="spinner"></span> Uploading ${esc(f.name)}…`;
+      try {
+        const d = await upload(f);
+        const ta = $('f-body'); const pos = ta.selectionEnd;
+        ta.setRangeText(`\n![${f.name.replace(/\.[^.]+$/, '').replace(/[-_]+/g, ' ')}](${d.path})\n`, pos, pos, 'end');
+        renderPreview();
+      } catch (err) { msg('edit-msg', esc(err.message)); }
+    }
+    $('upload-status').textContent = `${files.length} image(s) added.`;
+    e.target.value = '';
+  });
+
+  // ---- save / delete
+  $('edit-form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const btn = $('save-btn'); btn.disabled = true; btn.innerHTML = '<span class="spinner"></span> Publishing';
+    msg('edit-msg', '');
+    const body = {
+      slug: $('f-slug').value.trim(), title: $('f-title').value.trim(), date: $('f-date').value, excerpt: $('f-excerpt').value.trim(),
+      cover: $('f-cover').value.trim(), categories: $('f-cats').value, author: $('f-author').value.trim(), body: $('f-body').value, draft: $('f-draft').checked,
+      sha: current ? current.sha : undefined,
+    };
+    try {
+      const d = await api('/cms/posts', { method: 'POST', body });
+      current = { ...(current || {}), ...body, sha: d.sha, categories: body.categories.split(',').map((s) => s.trim()).filter(Boolean) };
+      $('f-slug').disabled = true; $('delete-btn').classList.remove('hidden'); $('save-btn').textContent = 'Save changes';
+      $('edit-title').textContent = `Edit: ${body.title}`;
+      msg('edit-msg', `${d.draft ? 'Saved as draft.' : 'Published.'} The site rebuilds in about a minute: <a href="${esc(d.url)}" target="_blank" rel="noopener">${esc(d.url)}</a> · <a href="${esc(d.commitUrl)}" target="_blank" rel="noopener">commit</a>`, true);
+    } catch (err) { msg('edit-msg', esc(err.message)); }
+    btn.disabled = false; if (btn.querySelector('.spinner')) btn.textContent = current && current.sha ? 'Save changes' : 'Publish';
+  });
+  $('delete-btn').addEventListener('click', async () => {
+    if (!current || !confirm(`Delete "${current.title}" from the website? This cannot be undone from here.`)) return;
+    try { await api(`/cms/posts/${encodeURIComponent(current.slug)}`, { method: 'DELETE' }); show('list'); await loadList(true); msg('list-msg', 'Story deleted. The site rebuilds in about a minute.', true); }
+    catch (err) { msg('edit-msg', esc(err.message)); }
+  });
+
+  // ---- boot
+  (async () => {
+    if (!token) return show('login');
+    try { const d = await api('/cms/me'); await enter(d.email); } catch { show('login'); }
+  })();
+})();
+</script>
+</body>
+</html>
