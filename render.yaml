@@ -1,5 +1,9 @@
 # Render Blueprint for the UCC public website.
 # Static site: builds with Astro, served from Render's global CDN on the free plan.
+#
+# NOTE: the live service (srv-db8beq3ncjis73fai6f0) was created through the API,
+# not from this Blueprint, so the headers/routes below are documentation until the
+# service is re-created from the Blueprint. /admin/ redirects via public/admin/index.html.
 services:
   - type: web
     name: ucc-website
