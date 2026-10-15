@@ -21,7 +21,7 @@ Either let the blueprint do it (Render dashboard → New → Blueprint → pick 
 | Plan | Free |
 | Auto-deploy | On |
 
-First build takes 1–2 minutes. Check the site at `https://ucc-website.onrender.com` before touching DNS.
+The site exists: https://dashboard.render.com/static/srv-db8beq3ncjis73fai6f0 (workspace UCC). First build takes 1–2 minutes. Check the site at `https://ucc-website-9cbc.onrender.com` before touching DNS.
 
 ## 3. Custom domain (Render dashboard → ucc-website → Settings → Custom Domains)
 
@@ -34,7 +34,7 @@ Change only these records:
 | Type | Name | Value | Note |
 | --- | --- | --- | --- |
 | A | `@` | `216.24.57.1` | Render apex IP (confirm in the Custom Domains screen) |
-| CNAME | `www` | `ucc-website.onrender.com` | |
+| CNAME | `www` | `ucc-website-9cbc.onrender.com` | |
 
 Leave everything else alone, in particular:
 
