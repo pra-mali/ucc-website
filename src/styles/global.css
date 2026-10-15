@@ -1,0 +1,145 @@
+/* Udaipur Cycling Club — site styles. Brand colours from the UCC logo. */
+:root {
+  --orange: #f7941d;
+  --magenta: #ec008c;
+  --sky: #00aeef;
+  --green: #22a84a;
+  --ink: #141414;
+  --ink-2: #3b3b3b;
+  --muted: #6b6b6b;
+  --line: #e6e6e6;
+  --bg: #ffffff;
+  --bg-2: #f7f7f8;
+  --card: #ffffff;
+  --accent: var(--orange);
+  --radius: 14px;
+  --shadow: 0 1px 2px rgba(0, 0, 0, 0.05), 0 8px 24px rgba(0, 0, 0, 0.06);
+  --font: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Noto Sans', 'Noto Sans Devanagari', sans-serif;
+  --font-display: 'Plus Jakarta Sans', var(--font);
+  --max: 1120px;
+  --gutter: clamp(16px, 4vw, 32px);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    --ink: #f2f2f2;
+    --ink-2: #d4d4d4;
+    --muted: #a3a3a3;
+    --line: #2a2a2a;
+    --bg: #0f0f10;
+    --bg-2: #171718;
+    --card: #1b1b1d;
+    --shadow: 0 1px 2px rgba(0, 0, 0, 0.4), 0 8px 24px rgba(0, 0, 0, 0.35);
+  }
+}
+:root[data-theme='dark'] {
+  --ink: #f2f2f2;
+  --ink-2: #d4d4d4;
+  --muted: #a3a3a3;
+  --line: #2a2a2a;
+  --bg: #0f0f10;
+  --bg-2: #171718;
+  --card: #1b1b1d;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  font-family: var(--font);
+  font-size: 17px;
+  line-height: 1.65;
+  color: var(--ink);
+  background: var(--bg);
+}
+img, video { max-width: 100%; height: auto; display: block; }
+a { color: inherit; text-decoration: none; }
+a:hover { color: var(--accent); }
+h1, h2, h3, h4 { font-family: var(--font-display); line-height: 1.15; letter-spacing: -0.01em; margin: 0 0 0.5em; }
+h1 { font-size: clamp(2rem, 5vw, 3.25rem); font-weight: 800; }
+h2 { font-size: clamp(1.6rem, 3.5vw, 2.25rem); font-weight: 800; }
+h3 { font-size: 1.35rem; font-weight: 700; }
+p { margin: 0 0 1em; }
+.container { max-width: var(--max); margin: 0 auto; padding: 0 var(--gutter); }
+.section { padding: clamp(48px, 8vw, 96px) 0; }
+.section-alt { background: var(--bg-2); }
+.eyebrow { display: inline-block; font-size: 0.8rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent); margin-bottom: 0.75rem; }
+.lead { font-size: 1.15rem; color: var(--ink-2); max-width: 60ch; }
+.muted { color: var(--muted); }
+
+/* Tricolour stripe used as the brand signature */
+.stripe { height: 6px; background: linear-gradient(90deg, var(--orange) 0 33.3%, var(--magenta) 33.3% 66.6%, var(--sky) 66.6% 100%); }
+
+/* Buttons */
+.btn {
+  display: inline-flex; align-items: center; gap: 0.5rem;
+  padding: 0.8rem 1.35rem; border-radius: 999px; font-weight: 700; font-size: 0.95rem;
+  background: var(--ink); color: var(--bg); border: 2px solid var(--ink); transition: transform 0.15s, background 0.15s, color 0.15s;
+  cursor: pointer;
+}
+.btn:hover { transform: translateY(-1px); color: var(--bg); background: var(--ink-2); border-color: var(--ink-2); }
+.btn-primary { background: var(--orange); border-color: var(--orange); color: #111; }
+.btn-primary:hover { background: #e2851a; border-color: #e2851a; color: #111; }
+.btn-outline { background: transparent; color: var(--ink); }
+.btn-outline:hover { background: var(--ink); color: var(--bg); }
+.btn-sm { padding: 0.5rem 1rem; font-size: 0.85rem; }
+
+/* Cards and grids */
+.grid { display: grid; gap: 24px; }
+.grid-3 { grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); }
+.grid-2 { grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); }
+.card { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow); }
+
+/* Page hero (inner pages) */
+.page-hero { padding: clamp(40px, 7vw, 80px) 0 clamp(24px, 4vw, 40px); border-bottom: 1px solid var(--line); }
+.page-hero h1 { margin-bottom: 0.25em; }
+
+/* Prose: imported WordPress block content */
+.prose { max-width: 72ch; }
+.prose > * + * { margin-top: 1.1em; }
+.prose h2, .prose h3, .prose h4 { margin-top: 1.8em; }
+.prose h4 { font-size: 1.2rem; }
+.prose img { border-radius: 10px; }
+.prose figure { margin: 1.5em 0; }
+.prose figcaption { font-size: 0.9rem; color: var(--muted); text-align: center; margin-top: 0.5em; }
+.prose blockquote { border-left: 4px solid var(--orange); margin: 1.5em 0; padding: 0.25em 1.25em; color: var(--ink-2); font-style: italic; }
+.prose a { color: var(--sky); text-decoration: underline; text-underline-offset: 3px; }
+.prose ul, .prose ol { padding-left: 1.4em; }
+.prose li + li { margin-top: 0.35em; }
+.prose table { border-collapse: collapse; width: 100%; font-size: 0.95rem; }
+.prose th, .prose td { border: 1px solid var(--line); padding: 0.5em 0.75em; text-align: left; }
+.prose .wp-block-image img, .prose .wp-block-image figure { margin-left: auto; margin-right: auto; }
+.prose .aligncenter { margin-left: auto; margin-right: auto; text-align: center; }
+.prose .has-text-align-center { text-align: center; }
+.prose .wp-block-buttons .wp-block-button__link { display: inline-block; padding: 0.6em 1.2em; border-radius: 999px; background: var(--orange); color: #111; text-decoration: none; font-weight: 700; }
+.prose .wp-block-embed iframe { width: 100%; aspect-ratio: 16 / 9; height: auto; border-radius: 10px; }
+.prose .has-luminous-vivid-orange-color { color: var(--orange); }
+.prose .has-medium-font-size { font-size: 1.15rem; }
+/* WordPress gallery blocks → responsive grid */
+.prose .wp-block-gallery { display: grid; gap: 12px; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); margin: 1.5em 0; }
+.prose .wp-block-gallery.columns-1 { grid-template-columns: 1fr; }
+.prose .wp-block-gallery.columns-2 { grid-template-columns: repeat(2, 1fr); }
+.prose .wp-block-gallery.columns-3 { grid-template-columns: repeat(3, 1fr); }
+.prose .wp-block-gallery figure { margin: 0; }
+.prose .wp-block-gallery.is-cropped img { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; }
+.prose .wp-block-gallery.columns-2.is-cropped img, .prose .wp-block-gallery.columns-1 img { aspect-ratio: auto; }
+@media (max-width: 600px) {
+  .prose .wp-block-gallery.columns-3 { grid-template-columns: repeat(2, 1fr); }
+}
+
+/* Photo gallery */
+.masonry { columns: 3 260px; column-gap: 14px; }
+.masonry a { display: block; break-inside: avoid; margin-bottom: 14px; border-radius: 10px; overflow: hidden; background: var(--bg-2); }
+.masonry img { width: 100%; transition: transform 0.3s; }
+.masonry a:hover img { transform: scale(1.03); }
+
+/* Utilities */
+.visually-hidden { position: absolute !important; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.chip { display: inline-block; font-size: 0.75rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; padding: 0.25em 0.7em; border-radius: 999px; background: var(--bg-2); color: var(--ink-2); border: 1px solid var(--line); }
+.chip-orange { background: rgba(247, 148, 29, 0.14); color: #b86306; border-color: transparent; }
+.chip-magenta { background: rgba(236, 0, 140, 0.12); color: #b2006a; border-color: transparent; }
+.chip-sky { background: rgba(0, 174, 239, 0.14); color: #0077a8; border-color: transparent; }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) .chip-orange { color: #ffb45e; }
+  :root:not([data-theme='light']) .chip-magenta { color: #ff6cc2; }
+  :root:not([data-theme='light']) .chip-sky { color: #6fd4ff; }
+}

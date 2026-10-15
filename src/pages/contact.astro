@@ -1,0 +1,49 @@
+---
+import Base from '../layouts/Base.astro';
+import { site } from '../data/site';
+const mapQuery = encodeURIComponent('Bhopalpura, Udaipur, Rajasthan 313001');
+---
+<Base title="Contact" description="Get in touch with Udaipur Cycling Club by email or WhatsApp.">
+  <section class="page-hero">
+    <div class="container">
+      <span class="eyebrow">Contact</span>
+      <h1>Say hello</h1>
+      <p class="lead">Questions about rides, membership or events? Reach us on WhatsApp or email and a club member will get back to you.</p>
+    </div>
+  </section>
+  <section class="section">
+    <div class="container cols">
+      <div class="card block">
+        <h3>HQ Address</h3>
+        <address>{site.address.map((l) => <div>{l}</div>)}</address>
+        <a class="btn btn-outline btn-sm" href={`https://www.google.com/maps/search/?api=1&query=${mapQuery}`} target="_blank" rel="noopener">Open in Google Maps</a>
+      </div>
+      <div class="card block">
+        <h3>Support</h3>
+        <p><strong>E-mail</strong><br /><a href={`mailto:${site.email}`}>{site.email}</a></p>
+        <p><strong>Phone</strong><br /><a href={site.whatsapp} target="_blank" rel="noopener">{site.phone}</a> <span class="muted">({site.phoneNote})</span></p>
+        <a class="btn btn-primary btn-sm" href={site.whatsapp} target="_blank" rel="noopener">Message on WhatsApp</a>
+      </div>
+      <div class="card block">
+        <h3>Follow us</h3>
+        <ul class="links">
+          <li><a href={site.social.instagram} target="_blank" rel="noopener">Instagram</a></li>
+          <li><a href={site.social.facebook} target="_blank" rel="noopener">Facebook</a></li>
+          <li><a href={site.social.youtube} target="_blank" rel="noopener">YouTube</a></li>
+          <li><a href={site.social.twitter} target="_blank" rel="noopener">X (Twitter)</a></li>
+          <li><a href={site.social.linktree} target="_blank" rel="noopener">All links</a></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .cols { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 20px; }
+  .block { padding: 24px; display: flex; flex-direction: column; gap: 12px; }
+  .block .btn { align-self: flex-start; margin-top: auto; }
+  address { font-style: normal; line-height: 1.6; }
+  .links { list-style: none; padding: 0; margin: 0; }
+  .links li { padding: 6px 0; border-bottom: 1px solid var(--line); font-weight: 600; }
+  .links li:last-child { border: 0; }
+</style>

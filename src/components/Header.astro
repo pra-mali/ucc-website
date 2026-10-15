@@ -1,0 +1,74 @@
+---
+import { site, nav, moreNav } from '../data/site';
+const path = Astro.url.pathname;
+const isActive = (href: string) => href !== '/' && path.startsWith(href);
+---
+<header class="site-header">
+  <div class="container bar">
+    <a href="/" class="brand" aria-label={`${site.name} home`}>
+      <img src="/logo-horizontal.png" alt="" width="150" height="110" class="logo-light" />
+      <img src="/logo-horizontal-ondark.png" alt="" width="150" height="110" class="logo-dark" />
+      <span class="visually-hidden">{site.name}</span>
+    </a>
+    <button class="menu-btn" aria-expanded="false" aria-controls="site-nav" id="menu-btn">
+      <span class="visually-hidden">Menu</span>
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+    </button>
+    <nav id="site-nav" class="nav" aria-label="Primary">
+      <ul>
+        {nav.map((n) => <li><a href={n.href} aria-current={isActive(n.href) ? 'page' : undefined}>{n.label}</a></li>)}
+        <li class="more">
+          <details>
+            <summary>More</summary>
+            <ul class="menu">
+              {moreNav.map((n) => <li><a href={n.href} target={n.href.startsWith('http') ? '_blank' : undefined} rel={n.href.startsWith('http') ? 'noopener' : undefined}>{n.label}</a></li>)}
+            </ul>
+          </details>
+        </li>
+        <li class="cta"><a href="/registration/" class="btn btn-primary btn-sm">Join UCC</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<script>
+  const btn = document.getElementById('menu-btn');
+  const nav = document.getElementById('site-nav');
+  btn?.addEventListener('click', () => {
+    const open = nav!.classList.toggle('open');
+    btn.setAttribute('aria-expanded', String(open));
+  });
+</script>
+
+<style>
+  .site-header { position: sticky; top: 0; z-index: 50; background: color-mix(in srgb, var(--bg) 88%, transparent); backdrop-filter: blur(10px); border-bottom: 1px solid var(--line); }
+  .bar { display: flex; align-items: center; justify-content: space-between; gap: 16px; min-height: 72px; }
+  .brand img { height: 52px; width: auto; }
+  .logo-dark { display: none; }
+  @media (prefers-color-scheme: dark) { :root:not([data-theme='light']) .logo-light { display: none; } :root:not([data-theme='light']) .logo-dark { display: block; } }
+  :root[data-theme='dark'] .logo-light { display: none; }
+  :root[data-theme='dark'] .logo-dark { display: block; }
+  .nav ul { list-style: none; margin: 0; padding: 0; display: flex; align-items: center; gap: 4px; }
+  .nav a { display: block; padding: 0.5rem 0.75rem; border-radius: 8px; font-weight: 600; font-size: 0.95rem; }
+  .nav a:hover, .nav a[aria-current='page'] { background: var(--bg-2); color: var(--ink); }
+  .nav a[aria-current='page'] { box-shadow: inset 0 -2px 0 var(--orange); }
+  .cta a { padding: 0.5rem 1rem; }
+  .cta a:hover { background: #e2851a; }
+  .more details { position: relative; }
+  .more summary { list-style: none; cursor: pointer; padding: 0.5rem 0.75rem; border-radius: 8px; font-weight: 600; font-size: 0.95rem; }
+  .more summary::-webkit-details-marker { display: none; }
+  .more summary:hover { background: var(--bg-2); }
+  .more .menu { position: absolute; right: 0; top: calc(100% + 6px); min-width: 220px; flex-direction: column; align-items: stretch; background: var(--card); border: 1px solid var(--line); border-radius: 12px; box-shadow: var(--shadow); padding: 6px; gap: 0; }
+  .menu-btn { display: none; background: none; border: 0; color: var(--ink); padding: 8px; border-radius: 8px; cursor: pointer; }
+  @media (max-width: 900px) {
+    .menu-btn { display: inline-flex; }
+    .nav { display: none; position: absolute; left: 0; right: 0; top: 100%; background: var(--bg); border-bottom: 1px solid var(--line); padding: 8px var(--gutter) 16px; }
+    .nav.open { display: block; }
+    .nav ul { flex-direction: column; align-items: stretch; }
+    .nav a { padding: 0.75rem; }
+    .more details { position: static; }
+    .more .menu { position: static; box-shadow: none; border: 0; padding-left: 12px; }
+    .cta { margin-top: 8px; }
+    .cta a { text-align: center; }
+  }
+</style>

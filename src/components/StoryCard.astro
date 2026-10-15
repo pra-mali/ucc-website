@@ -1,0 +1,38 @@
+---
+import type { CollectionEntry } from 'astro:content';
+interface Props { story: CollectionEntry<'stories'>; featured?: boolean }
+const { story, featured = false } = Astro.props;
+const { title, excerpt, cover, coverAlt, categories, date } = story.data;
+const slug = story.data.slug || story.id;
+const dateStr = date.toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' });
+const chip = (c: string) => /expedition/i.test(c) ? 'chip-sky' : /achievement|marathon/i.test(c) ? 'chip-magenta' : 'chip-orange';
+---
+<article class:list={['card', 'story', { featured }]}>
+  <a href={`/${slug}/`} class="media" aria-hidden="true" tabindex="-1">
+    {cover ? <img src={cover} alt={coverAlt || ''} loading="lazy" width="800" height="500" /> : <div class="placeholder"></div>}
+  </a>
+  <div class="body">
+    <div class="meta">
+      {categories.slice(0, 2).map((c) => <span class:list={['chip', chip(c)]}>{c}</span>)}
+      <time datetime={date.toISOString()} class="muted">{dateStr}</time>
+    </div>
+    <h3><a href={`/${slug}/`}>{title}</a></h3>
+    {excerpt && <p class="muted excerpt">{excerpt}</p>}
+    <a href={`/${slug}/`} class="read">Read story →</a>
+  </div>
+</article>
+
+<style>
+  .story { display: flex; flex-direction: column; transition: transform 0.2s, box-shadow 0.2s; }
+  .story:hover { transform: translateY(-3px); box-shadow: 0 2px 4px rgba(0,0,0,.06), 0 16px 36px rgba(0,0,0,.12); }
+  .media { display: block; aspect-ratio: 16 / 10; overflow: hidden; background: var(--bg-2); }
+  .media img { width: 100%; height: 100%; object-fit: cover; }
+  .placeholder { width: 100%; height: 100%; background: linear-gradient(135deg, var(--orange), var(--magenta), var(--sky)); }
+  .body { padding: 18px 20px 22px; display: flex; flex-direction: column; gap: 8px; flex: 1; }
+  .meta { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; font-size: 0.85rem; }
+  h3 { font-size: 1.2rem; margin: 0; }
+  .featured h3 { font-size: 1.6rem; }
+  .excerpt { font-size: 0.95rem; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; margin: 0; }
+  .read { margin-top: auto; font-weight: 700; color: var(--orange); font-size: 0.92rem; }
+  @media (min-width: 800px) { .featured { grid-column: span 2; } .featured .media { aspect-ratio: 21 / 9; } }
+</style>

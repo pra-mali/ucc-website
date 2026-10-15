@@ -1,0 +1,41 @@
+# Render Blueprint for the UCC public website.
+# Static site: builds with Astro, served from Render's global CDN on the free plan.
+services:
+  - type: web
+    name: ucc-website
+    runtime: static
+    repo: https://github.com/pra-mali/ucc-website
+    branch: main
+    buildCommand: npm ci && npm run build
+    staticPublishPath: dist
+    pullRequestPreviewsEnabled: false
+    envVars:
+      - key: NODE_VERSION
+        value: "22"
+    headers:
+      - path: /uploads/*
+        name: Cache-Control
+        value: public, max-age=31536000, immutable
+      - path: /_astro/*
+        name: Cache-Control
+        value: public, max-age=31536000, immutable
+    routes:
+      # Old WordPress URLs that no longer exist on the new site.
+      - type: redirect
+        source: /blog
+        destination: /blogs/
+      - type: redirect
+        source: /stories
+        destination: /blogs/
+      - type: redirect
+        source: /feed
+        destination: /blogs/
+      - type: redirect
+        source: /events/*
+        destination: /events/
+      - type: redirect
+        source: /wp-admin/*
+        destination: /
+      - type: redirect
+        source: /wp-login.php
+        destination: /

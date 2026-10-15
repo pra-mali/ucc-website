@@ -1,0 +1,55 @@
+---
+import Base from '../../layouts/Base.astro';
+import StoryCard from '../../components/StoryCard.astro';
+import { getCollection } from 'astro:content';
+
+const stories = (await getCollection('stories', ({ data }) => !data.draft))
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+const categories = [...new Set(stories.flatMap((s) => s.data.categories))].sort();
+---
+<Base title="Inspiring Stories" description="Ride reports, member achievements, expeditions and newsletters from Udaipur Cycling Club riders.">
+  <section class="page-hero">
+    <div class="container">
+      <span class="eyebrow">Inspiring stories</span>
+      <h1>From the saddle</h1>
+      <p class="lead">Ride reports, milestones, expeditions and newsletters written by UCC members.</p>
+      <div class="filters" role="group" aria-label="Filter by category">
+        <button class="chip active" data-cat="">All</button>
+        {categories.map((c) => <button class="chip" data-cat={c}>{c}</button>)}
+      </div>
+    </div>
+  </section>
+  <section class="section">
+    <div class="container">
+      <div class="grid grid-3" id="stories">
+        {stories.map((s, i) => <div class="item" data-cats={s.data.categories.join('|')}><StoryCard story={s} featured={i === 0} /></div>)}
+      </div>
+      <p class="muted empty" id="empty" hidden>No stories in this category yet.</p>
+    </div>
+  </section>
+</Base>
+
+<script>
+  const buttons = document.querySelectorAll<HTMLButtonElement>('.filters .chip');
+  const items = document.querySelectorAll<HTMLElement>('#stories .item');
+  const empty = document.getElementById('empty')!;
+  buttons.forEach((b) => b.addEventListener('click', () => {
+    buttons.forEach((x) => x.classList.toggle('active', x === b));
+    const cat = b.dataset.cat || '';
+    let shown = 0;
+    items.forEach((it) => {
+      const ok = !cat || (it.dataset.cats || '').split('|').includes(cat);
+      it.hidden = !ok; if (ok) shown++;
+    });
+    empty.hidden = shown > 0;
+  }));
+</script>
+
+<style>
+  .filters { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 20px; }
+  .filters .chip { cursor: pointer; font-family: inherit; }
+  .filters .chip.active { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+  .item { display: contents; }
+  .item[hidden] { display: none; }
+  .empty { margin-top: 24px; }
+</style>

@@ -1,0 +1,32 @@
+---
+import Base from '../layouts/Base.astro';
+import { site } from '../data/site';
+---
+<Base title="Member Registration" description="Join Udaipur Cycling Club. Register as a member to ride with the biggest cycling community in Udaipur.">
+  <section class="page-hero">
+    <div class="container narrow">
+      <span class="eyebrow">Join us</span>
+      <h1>Member Registration</h1>
+      <p class="lead">Join our vibrant community of cycling enthusiasts and embark on thrilling adventures on two wheels.</p>
+    </div>
+  </section>
+  <section class="section">
+    <div class="container narrow">
+      <div class="prose">
+        <p>By becoming a member of Udaipur Cycling Club, you gain access to a network of like-minded individuals who share your passion for cycling. Connect with fellow cyclists, exchange tips and advice, and forge lasting friendships as you explore the beautiful landscapes and scenic routes of Udaipur together.</p>
+        <p>As a registered member you can take part in group rides, races, tours and our signature expeditions, in a supportive and motivating environment. Please read the <a href="/ucc-code-of-conduct/">Code of Conduct</a> and <a href="/udaipurcyclingclub-rules-guidelines/">Rules &amp; Guidelines</a> before registering.</p>
+        <p><a href={site.registrationForm} target="_blank" rel="noopener" class="btn btn-primary">Open the registration form</a></p>
+      </div>
+      <div class="form-wrap">
+        <div style="width:100%;height:600px;" data-fillout-id={site.registrationFormId} data-fillout-embed-type="standard" data-fillout-inherit-parameters data-fillout-dynamic-resize></div>
+      </div>
+      <p class="muted">Already a member? Sign in to the <a href={site.appUrl} target="_blank" rel="noopener">UCC app</a> to log rides and events.</p>
+    </div>
+  </section>
+  <script is:inline src="https://server.fillout.com/embed/v1/"></script>
+</Base>
+
+<style>
+  .narrow { max-width: 820px; }
+  .form-wrap { margin: 28px 0; border: 1px solid var(--line); border-radius: 14px; overflow: hidden; background: #fff; }
+</style>

@@ -1,0 +1,17 @@
+{
+  "name": "ucc-website",
+  "version": "1.0.0",
+  "description": "Udaipur Cycling Club public website (udaipurcycling.club)",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "import:wp": "node scripts/import-wp.mjs"
+  },
+  "dependencies": {
+    "@astrojs/sitemap": "^3.7.4",
+    "astro": "^5.18.2"
+  }
+}

@@ -1,0 +1,32 @@
+---
+import Base from '../layouts/Base.astro';
+import expeditions from '../data/expeditions.json';
+---
+<Base title="Signature Cycling Expeditions" description="UCC's signature rides: Cyclorun, Jodhpur Night Ride, Statue of Unity, Jaisalmer, Sita Mata Sanctuary, TAAVDO, Tour de Diu and the Udaipur Duathlon.">
+  <section class="page-hero">
+    <div class="container">
+      <span class="eyebrow">Signature expeditions</span>
+      <h1>Rides that define Udaipur Cycling Club</h1>
+      <p class="lead">Every year UCC organises a set of signature expeditions, from overnight rides across Rajasthan to multi-day tours. These are the badges our members ride for.</p>
+    </div>
+  </section>
+  <section class="section">
+    <div class="container">
+      <div class="grid grid-3">
+        {expeditions.map((e) => (
+          <figure class="card exp">
+            <img src={e.src} alt={e.title} loading="lazy" width="600" height="480" />
+            <figcaption>{e.title}</figcaption>
+          </figure>
+        ))}
+      </div>
+      <p class="muted" style="margin-top:32px">Upcoming editions are announced on our <a href="/events/">events page</a> and in the UCC app. Want to ride with us? <a href="/registration/">Register as a member</a>.</p>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .exp { margin: 0; padding: 20px; display: flex; flex-direction: column; align-items: center; gap: 12px; }
+  .exp img { width: 100%; max-height: 260px; object-fit: contain; }
+  figcaption { font-family: var(--font-display); font-weight: 800; font-size: 1.15rem; text-align: center; }
+</style>

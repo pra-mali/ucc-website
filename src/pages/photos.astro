@@ -1,0 +1,45 @@
+---
+import Base from '../layouts/Base.astro';
+import photos from '../data/photos.json';
+---
+<Base title="Photos" description="Photo gallery from Udaipur Cycling Club rides, expeditions and events.">
+  <section class="page-hero">
+    <div class="container">
+      <span class="eyebrow">Gallery</span>
+      <h1>Photos</h1>
+      <p class="lead">Moments from our rides, expeditions and celebrations. Follow us on <a href="https://www.instagram.com/udaipurcyclingclub/" target="_blank" rel="noopener">Instagram</a> for the latest.</p>
+    </div>
+  </section>
+  <section class="section">
+    <div class="container">
+      <div class="masonry">
+        {photos.map((p, i) => (
+          <a href={p.src} target="_blank" rel="noopener" data-lightbox>
+            <img src={p.src} alt={p.alt || `UCC photo ${i + 1}`} loading="lazy" width={p.width} height={p.height} />
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <dialog id="lightbox" aria-label="Photo viewer">
+    <button id="lb-close" aria-label="Close">×</button>
+    <img id="lb-img" alt="" />
+  </dialog>
+</Base>
+
+<script>
+  const dlg = document.getElementById('lightbox') as HTMLDialogElement;
+  const img = document.getElementById('lb-img') as HTMLImageElement;
+  document.querySelectorAll<HTMLAnchorElement>('[data-lightbox]').forEach((a) =>
+    a.addEventListener('click', (e) => { e.preventDefault(); img.src = a.href; img.alt = a.querySelector('img')?.alt || ''; dlg.showModal(); }));
+  document.getElementById('lb-close')?.addEventListener('click', () => dlg.close());
+  dlg.addEventListener('click', (e) => { if (e.target === dlg) dlg.close(); });
+</script>
+
+<style>
+  dialog { border: 0; padding: 0; background: transparent; max-width: 96vw; max-height: 96vh; }
+  dialog::backdrop { background: rgba(0, 0, 0, 0.88); }
+  dialog img { max-width: 96vw; max-height: 92vh; object-fit: contain; border-radius: 8px; }
+  #lb-close { position: fixed; top: 12px; right: 16px; font-size: 2rem; line-height: 1; background: none; border: 0; color: #fff; cursor: pointer; }
+</style>

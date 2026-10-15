@@ -1,0 +1,121 @@
+---
+import Base from '../layouts/Base.astro';
+import StoryCard from '../components/StoryCard.astro';
+import { getCollection } from 'astro:content';
+import { site } from '../data/site';
+import expeditions from '../data/expeditions.json';
+
+const stories = (await getCollection('stories', ({ data }) => !data.draft))
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
+  .slice(0, 3);
+---
+<Base>
+  <section class="hero">
+    <div class="container hero-inner">
+      <div>
+        <span class="eyebrow">Udaipur · Since {site.founded}</span>
+        <h1>{site.tagline}</h1>
+        <p class="lead">{site.description}</p>
+        <div class="actions">
+          <a href="/registration/" class="btn btn-primary">Become a member</a>
+          <a href="/blogs/" class="btn btn-outline">Read our stories</a>
+        </div>
+        <ul class="stats" aria-label="Club at a glance">
+          <li><strong>100+</strong><span>active members</span></li>
+          <li><strong>8</strong><span>signature expeditions</span></li>
+          <li><strong>Daily</strong><span>group rides</span></li>
+        </ul>
+      </div>
+      <div class="hero-art" aria-hidden="true">
+        <img src="/uploads/IMG_4107-1-1.jpg" alt="" width="1280" height="577" fetchpriority="high" />
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <span class="eyebrow">Who we are</span>
+      <div class="two-col">
+        <div>
+          <h2>A close-knit family on two wheels</h2>
+        </div>
+        <div class="prose">
+          <p>We are a group of passionate cyclists based in Udaipur, with a vision to make our city the biggest cycling hub in India. With over 100+ privileged members, we ride every day, exploring the off-roads and roads of Udaipur and beyond.</p>
+          <p>Our aim is to promote cycling in all forms, be it commuting, leisure, fitness, or sports, and create a community of like-minded individuals who share our love for cycling. We organise regular rides, events and workshops to engage and educate our members on the benefits of cycling and a healthy, sustainable lifestyle.</p>
+          <p>Udaipur Cycling Club was founded in May 2017 by a group of cycling enthusiasts. Since then we have grown into a close-knit family, bonded by our passion for cycling and the outdoors.</p>
+          <p><a href="/about/">More about the club →</a></p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-alt">
+    <div class="container">
+      <div class="section-head">
+        <div>
+          <span class="eyebrow">Signature expeditions</span>
+          <h2>Rides that define UCC</h2>
+        </div>
+        <a href="/signature-cycling-expedition/" class="btn btn-outline btn-sm">All expeditions</a>
+      </div>
+      <div class="exp-grid">
+        {expeditions.map((e) => (
+          <a href="/signature-cycling-expedition/" class="exp">
+            <img src={e.src} alt={e.title} loading="lazy" width="400" height="300" />
+            <span>{e.title}</span>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="section-head">
+        <div>
+          <span class="eyebrow">Inspiring stories</span>
+          <h2>From our riders</h2>
+        </div>
+        <a href="/blogs/" class="btn btn-outline btn-sm">See all stories</a>
+      </div>
+      <div class="grid grid-3">
+        {stories.map((s) => <StoryCard story={s} />)}
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-alt">
+    <div class="container cta-band">
+      <blockquote>
+        “Life is like a bike ride, go as slowly as you want as long as you keep going.”
+      </blockquote>
+      <div class="cta-actions">
+        <a href="/registration/" class="btn btn-primary">Join Udaipur Cycling Club</a>
+        <a href={site.appUrl} class="btn btn-outline" target="_blank" rel="noopener">Open the UCC app</a>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .hero { padding: clamp(40px, 7vw, 88px) 0 clamp(32px, 6vw, 72px); overflow: hidden; }
+  .hero-inner { display: grid; grid-template-columns: 1.1fr 1fr; gap: 40px; align-items: center; }
+  .actions { display: flex; gap: 12px; flex-wrap: wrap; margin: 24px 0 32px; }
+  .stats { list-style: none; margin: 0; padding: 0; display: flex; gap: 28px; flex-wrap: wrap; }
+  .stats li { display: flex; flex-direction: column; }
+  .stats strong { font-family: var(--font-display); font-size: 1.6rem; font-weight: 800; }
+  .stats span { color: var(--muted); font-size: 0.9rem; }
+  .hero-art img { border-radius: 20px; box-shadow: var(--shadow); object-fit: cover; aspect-ratio: 4 / 3; width: 100%; }
+  .two-col { display: grid; grid-template-columns: 1fr 1.6fr; gap: 40px; }
+  .section-head { display: flex; justify-content: space-between; align-items: end; gap: 16px; margin-bottom: 28px; flex-wrap: wrap; }
+  .section-head h2 { margin: 0; }
+  .exp-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 16px; }
+  .exp { display: flex; flex-direction: column; gap: 10px; background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 14px; transition: transform 0.2s; }
+  .exp:hover { transform: translateY(-3px); }
+  .exp img { aspect-ratio: 1; object-fit: contain; width: 100%; }
+  .exp span { font-weight: 700; font-size: 0.95rem; text-align: center; color: var(--ink); }
+  .cta-band { text-align: center; }
+  .cta-band blockquote { margin: 0 auto 24px; font-family: var(--font-display); font-weight: 800; font-size: clamp(1.3rem, 3vw, 2rem); max-width: 28ch; line-height: 1.3; }
+  .cta-actions { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+  @media (max-width: 860px) { .hero-inner, .two-col { grid-template-columns: 1fr; } .hero-art { order: -1; } }
+</style>

@@ -1,0 +1,42 @@
+---
+import Base from '../layouts/Base.astro';
+import { site } from '../data/site';
+---
+<Base title="Events" description="Upcoming Udaipur Cycling Club rides and events. Registrations run through the UCC app.">
+  <section class="page-hero">
+    <div class="container">
+      <span class="eyebrow">Events</span>
+      <h1>Rides &amp; events</h1>
+      <p class="lead">Sunday group rides, brevets, expeditions and celebrations. Registrations and ride check-ins run through the UCC app.</p>
+    </div>
+  </section>
+  <section class="section">
+    <div class="container grid grid-2">
+      <div class="card block">
+        <h3>Upcoming events</h3>
+        <p class="muted">See the live calendar, register and track your points in the UCC app.</p>
+        <a href={`${site.appUrl}/events.html`} class="btn btn-primary" target="_blank" rel="noopener">Open events in the app</a>
+      </div>
+      <div class="card block">
+        <h3>Signature expeditions</h3>
+        <p class="muted">Our annual flagship rides: Cyclorun, Jodhpur Night Ride, Statue of Unity, Jaisalmer, TAAVDO and more.</p>
+        <a href="/signature-cycling-expedition/" class="btn btn-outline">View expeditions</a>
+      </div>
+      <div class="card block">
+        <h3>Monthly &amp; annual challenges</h3>
+        <p class="muted">Distance, elevation and riding-day targets, plus the UCC Super Rider medal.</p>
+        <a href="/ucc-challenges/" class="btn btn-outline">See the challenges</a>
+      </div>
+      <div class="card block">
+        <h3>New here?</h3>
+        <p class="muted">Join the club to get ride announcements on WhatsApp and access to all events.</p>
+        <a href="/registration/" class="btn btn-outline">Register as a member</a>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .block { padding: 24px; display: flex; flex-direction: column; gap: 10px; }
+  .block .btn { align-self: flex-start; margin-top: auto; }
+</style>
