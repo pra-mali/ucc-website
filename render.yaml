@@ -19,13 +19,14 @@ services:
       - path: /_astro/*
         name: Cache-Control
         value: public, max-age=31536000, immutable
-      - path: /admin/*
-        name: X-Robots-Tag
-        value: noindex, nofollow
-      - path: /admin/*
-        name: Cache-Control
-        value: no-store
     routes:
+      # Story publishing lives in the app admin.
+      - type: redirect
+        source: /admin
+        destination: https://app.udaipurcycling.club/stories.html
+      - type: redirect
+        source: /admin/*
+        destination: https://app.udaipurcycling.club/stories.html
       # Old WordPress URLs that no longer exist on the new site.
       - type: redirect
         source: /blog

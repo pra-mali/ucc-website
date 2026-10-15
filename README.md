@@ -26,9 +26,7 @@ npm run preview    # serve the built site locally
 
 ### Writing a new story in the admin (recommended)
 
-Open [udaipurcycling.club/admin/](https://udaipurcycling.club/admin/) and sign in with the club admin email, its password and the 6-digit code from the authenticator app. "New story" gives you a Markdown editor with live preview, cover and inline image upload, categories and a draft toggle. Publishing commits the story to this repo through the backend's `/cms` API (see `uccapp-backend/cms.js`), and Render rebuilds the site in about a minute. Stories imported from WordPress (`.json`) are listed read-only there; edit those files on GitHub.
-
-The page is a single static file, `public/admin/index.html`, that talks to `https://uccapp-backend-8kxg.onrender.com`. Append `?api=http://localhost:3000` to point it at a local backend.
+Open the UCC app admin at [app.udaipurcycling.club/stories.html](https://app.udaipurcycling.club/stories.html) (sign in with the admin email, password and the 6-digit authenticator code). "New story" gives you a Markdown editor with live preview, cover and inline image upload, categories and a draft toggle. Publishing commits the story to this repo through the backend's `/cms` API (see `uccapp-backend/cms.js`), and Render rebuilds the site in about a minute. Stories imported from WordPress (`.json`) are listed read-only there; edit those files on GitHub. `udaipurcycling.club/admin/` redirects there.
 
 ### Writing a new story by hand
 
