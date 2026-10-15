@@ -110,6 +110,6 @@ const shareUrl = new URL(Astro.url.pathname, Astro.site).toString();
   .share a { padding: 9px 16px; border-radius: 999px; border: 1px solid rgba(255, 255, 255, 0.2); }
   .share a:hover { background: var(--orange); border-color: var(--orange); color: #2b1100; }
   .section-alt { margin-top: clamp(48px, 7vw, 80px); }
-  @media (max-width: 600px) { .has-cover { min-height: 72svh; padding-top: 96px; } }
+  @media (max-width: 600px) { .has-cover { min-height: min(72svh, 620px); padding-top: 96px; } }
   @media (prefers-reduced-motion: reduce) { .has-cover .cover { animation: none; } }
 </style>
