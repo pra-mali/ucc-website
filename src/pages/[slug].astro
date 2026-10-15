@@ -25,6 +25,11 @@ const { kind, entry, related } = Astro.props;
 const isStory = kind === 'story';
 const d = entry.data as any;
 const Content = d.html ? null : (await render(entry)).Content;
+// Imported WordPress HTML keeps its /uploads/ URLs untouched; we only add lazy
+// loading so gallery-heavy stories don't fetch every image up front.
+const html = d.html
+  ? d.html.replace(/<img\b(?![^>]*\bloading=)/g, '<img loading="lazy" decoding="async"')
+  : null;
 const dateStr = isStory ? d.date.toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' }) : '';
 const shareUrl = new URL(Astro.url.pathname, Astro.site).toString();
 ---
@@ -55,7 +60,7 @@ const shareUrl = new URL(Astro.url.pathname, Astro.site).toString();
       )}
       <div class="container narrow">
         <div class="prose body">
-          {d.html ? <Fragment set:html={d.html} /> : Content && <Content />}
+          {html ? <Fragment set:html={html} /> : Content && <Content />}
         </div>
         <div class="share">
           <span class="muted">Share:</span>
@@ -84,7 +89,7 @@ const shareUrl = new URL(Astro.url.pathname, Astro.site).toString();
       </header>
       <div class="container narrow">
         <div class="prose body">
-          {d.html ? <Fragment set:html={d.html} /> : Content && <Content />}
+          {html ? <Fragment set:html={html} /> : Content && <Content />}
         </div>
       </div>
     </article>
