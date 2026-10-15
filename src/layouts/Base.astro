@@ -11,7 +11,7 @@ interface Props {
   type?: 'website' | 'article';
   publishedTime?: Date;
   noindex?: boolean;
-  /** Render without the standard header, stripe and footer (used by the dark home page). */
+  /** Render without the standard header and footer (the home page has its own). */
   bare?: boolean;
 }
 const { title, description = site.description, image, type = 'website', publishedTime, noindex = false, bare = false } = Astro.props;
@@ -31,7 +31,7 @@ const ogImage = new URL(image || '/logo-horizontal.png', Astro.site);
     <link rel="icon" href="/favicon.png" type="image/png" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <link rel="sitemap" href="/sitemap-index.xml" />
-    <meta name="theme-color" content="#f7941d" />
+    <meta name="theme-color" content="#07090c" />
     <meta property="og:site_name" content={site.name} />
     <meta property="og:type" content={type} />
     <meta property="og:title" content={title || site.name} />
@@ -43,11 +43,10 @@ const ogImage = new URL(image || '/logo-horizontal.png', Astro.site);
     <meta name="twitter:site" content="@Udaipur_Cycling" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@700;800&family=Noto+Sans+Devanagari:wght@400;700&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Onest:wght@300;400;500;600;700&family=Instrument+Serif:ital@0;1&family=Noto+Sans+Devanagari:wght@400;700&display=swap" rel="stylesheet" />
     <slot name="head" />
   </head>
   <body class={bare ? 'bare' : undefined}>
-    {!bare && <div class="stripe"></div>}
     {!bare && <Header />}
     <main id="main">
       <slot />

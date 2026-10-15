@@ -42,28 +42,25 @@ const shareUrl = new URL(Astro.url.pathname, Astro.site).toString();
 >
   {isStory ? (
     <article>
-      <header class="page-hero story-head">
-        <div class="container narrow">
+      <header class:list={['story-head', { 'has-cover': d.cover, 'page-hero': !d.cover }]}>
+        {d.cover && <img src={d.cover} alt={d.coverAlt || ''} class="cover" width="1600" height="900" fetchpriority="high" />}
+        {d.cover && <div class="shade" aria-hidden="true"></div>}
+        <div class="container narrow head-copy">
           <div class="meta">
             {d.categories.map((c: string) => <span class="chip chip-orange">{c}</span>)}
-            <time datetime={d.date.toISOString()} class="muted">{dateStr}</time>
-            <span class="muted">· {d.author}</span>
+            <time datetime={d.date.toISOString()}>{dateStr}</time>
+            <span>· {d.author}</span>
           </div>
           <h1>{d.title}</h1>
           {d.excerpt && <p class="lead">{d.excerpt}</p>}
         </div>
       </header>
-      {d.cover && (
-        <div class="container narrow">
-          <img src={d.cover} alt={d.coverAlt || ''} class="cover" width="1200" height="675" />
-        </div>
-      )}
       <div class="container narrow">
         <div class="prose body">
           {html ? <Fragment set:html={html} /> : Content && <Content />}
         </div>
         <div class="share">
-          <span class="muted">Share:</span>
+          <span class="muted">Share</span>
           <a href={`https://wa.me/?text=${encodeURIComponent(d.title + ' ' + shareUrl)}`} target="_blank" rel="noopener">WhatsApp</a>
           <a href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}`} target="_blank" rel="noopener">Facebook</a>
           <a href={`https://twitter.com/intent/tweet?url=${encodeURIComponent(shareUrl)}&text=${encodeURIComponent(d.title)}`} target="_blank" rel="noopener">X</a>
@@ -73,7 +70,7 @@ const shareUrl = new URL(Astro.url.pathname, Astro.site).toString();
         <section class="section section-alt">
           <div class="container">
             <span class="eyebrow">Keep reading</span>
-            <h2>More stories</h2>
+            <h2>More <em>stories</em></h2>
             <div class="grid grid-3">{related.map((s: any) => <StoryCard story={s} />)}</div>
           </div>
         </section>
@@ -97,11 +94,22 @@ const shareUrl = new URL(Astro.url.pathname, Astro.site).toString();
 </Base>
 
 <style>
-  .narrow { max-width: 820px; }
-  .meta { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 14px; font-size: 0.9rem; }
-  .story-head h1 { font-size: clamp(1.8rem, 4.2vw, 2.8rem); }
-  .cover { width: 100%; border-radius: 16px; margin: 28px 0 8px; object-fit: cover; max-height: 560px; }
-  .body { padding: 24px 0 8px; max-width: none; }
-  .share { display: flex; gap: 14px; align-items: center; border-top: 1px solid var(--line); margin-top: 32px; padding-top: 18px; font-weight: 600; }
-  .share a:hover { color: var(--orange); }
+  .narrow { max-width: 860px; }
+  .meta { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 18px; font-size: 0.92rem; color: var(--dim); }
+  .story-head h1 { font-size: clamp(2.2rem, 5.6vw, 4.5rem); }
+  .story-head .lead { margin: 0; }
+  .has-cover { position: relative; min-height: min(78svh, 720px); display: flex; align-items: flex-end; overflow: hidden; padding: 120px 0 clamp(32px, 5vw, 56px); }
+  .has-cover .cover { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; animation: kb 20s ease-out forwards; }
+  .has-cover .shade { position: absolute; inset: 0; background: linear-gradient(180deg, rgba(7, 9, 12, 0.55) 0%, rgba(7, 9, 12, 0.15) 30%, rgba(7, 9, 12, 0.6) 65%, #07090c 100%); }
+  .has-cover .head-copy { position: relative; width: 100%; }
+  .has-cover .lead { color: rgba(255, 255, 255, 0.88); }
+  @keyframes kb { from { transform: scale(1.02); } to { transform: scale(1.1); } }
+  .body { padding: 32px 0 8px; max-width: none; }
+  .share { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; border-top: 1px solid var(--line); margin-top: 40px; padding-top: 20px; font-weight: 600; font-size: 14px; }
+  .share .muted { margin-right: 6px; font-size: 13px; letter-spacing: 0.06em; text-transform: uppercase; }
+  .share a { padding: 9px 16px; border-radius: 999px; border: 1px solid rgba(255, 255, 255, 0.2); }
+  .share a:hover { background: var(--orange); border-color: var(--orange); color: #2b1100; }
+  .section-alt { margin-top: clamp(48px, 7vw, 80px); }
+  @media (max-width: 600px) { .has-cover { min-height: 72svh; padding-top: 96px; } }
+  @media (prefers-reduced-motion: reduce) { .has-cover .cover { animation: none; } }
 </style>
