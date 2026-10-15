@@ -11,8 +11,10 @@ interface Props {
   type?: 'website' | 'article';
   publishedTime?: Date;
   noindex?: boolean;
+  /** Render without the standard header, stripe and footer (used by the dark home page). */
+  bare?: boolean;
 }
-const { title, description = site.description, image, type = 'website', publishedTime, noindex = false } = Astro.props;
+const { title, description = site.description, image, type = 'website', publishedTime, noindex = false, bare = false } = Astro.props;
 const fullTitle = title ? `${title} | ${site.name}` : `${site.name} - ${site.tagline}`;
 const canonical = new URL(Astro.url.pathname, Astro.site);
 const ogImage = new URL(image || '/logo-horizontal.png', Astro.site);
@@ -44,12 +46,12 @@ const ogImage = new URL(image || '/logo-horizontal.png', Astro.site);
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@700;800&family=Noto+Sans+Devanagari:wght@400;700&display=swap" rel="stylesheet" />
     <slot name="head" />
   </head>
-  <body>
-    <div class="stripe"></div>
-    <Header />
+  <body class={bare ? 'bare' : undefined}>
+    {!bare && <div class="stripe"></div>}
+    {!bare && <Header />}
     <main id="main">
       <slot />
     </main>
-    <Footer />
+    {!bare && <Footer />}
   </body>
 </html>

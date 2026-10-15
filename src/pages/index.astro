@@ -1,121 +1,322 @@
 ---
+/**
+ * Home page: "Obsidian Glass" — a dark, photo-led one-page site with frosted
+ * glass panels. Uses its own header and footer (Base `bare` mode).
+ */
 import Base from '../layouts/Base.astro';
-import StoryCard from '../components/StoryCard.astro';
 import { getCollection } from 'astro:content';
 import { site } from '../data/site';
-import expeditions from '../data/expeditions.json';
 
-const stories = (await getCollection('stories', ({ data }) => !data.draft))
-  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
-  .slice(0, 3);
+const all = await getCollection('stories', ({ data }) => !data.draft);
+const bySlug = (slug: string) => all.find((s) => (s.data.slug || s.id) === slug);
+const href = (slug: string) => `/${slug}/`;
+
+// Curated stories for the switcher. Each must exist in the stories collection.
+const featured = [
+  { slug: 'ucc-shivani-nalwaya-udaipurs-first-female-ironman-70-3-finisher', word: 'Ironman', tag: 'Milestone · Nov 2025', title: 'Udaipur’s youngest woman Ironman 70.3 finisher', body: 'Shivani Nalwaya swims 1.9 km, rides 90 km and runs 21.1 km to make club history.', img: '/uploads/Shivaani-Nalwaya-Udaipur-Cycling-Club-UCC.jpg', pos: 'center 22%' },
+  { slug: 'ucc-417-km-cycle-ride-udaipur-salangpur-balaji', word: 'Balaji', tag: 'Ride diary · Feb 2026', title: 'Udaipur to Salangpur Balaji', body: 'Ranjeet Singh’s diary of a 417 km ride from Udaipur to the Balaji temple at Salangpur.', img: '/uploads/ucc-udaipur-417km-udaipur-salangpur-balaji-18.jpeg', pos: 'center 40%' },
+  { slug: 'a-bicycling-journey-from-manali-through-leh-to-khardungla', word: 'Leh', tag: 'Expedition · 2019', title: 'Manali to Leh to Khardung La', body: 'Kailash Jain and Dr Sharad Iyengar cross the Himalaya by bicycle.', img: '/uploads/Udaipur-Cycling-Club-Manali-Leh-Khardungla-Kailash-Sharad-12.jpg', pos: 'center 40%' },
+  { slug: 'meet-sharad-jain-the-cyclist-who-pedaled-his-way-to-50000-km', word: 'Sharad', tag: 'Milestone · 2023', title: 'Meet Sharad Jain', body: 'The rider who pedalled his way past 50,000 km with the club.', img: '/uploads/Sharad-Jain-2.jpg', pos: 'center 40%' },
+].filter((f) => bySlug(f.slug));
+
+const rideTypes = [
+  { title: 'Group rides', text: 'Every morning around Udaipur, at your pace.', img: '/uploads/OFxkTLVeW3tywYGrjajlW1eYFm9Uigzzqzpz6e15_c8-2048x1536-1.jpg', alt: 'Riders on a hill road at sunrise', href: '/events/' },
+  { title: 'Brevets', text: 'Long-distance rides through the night and into the dawn.', img: '/uploads/Lakecity-200-BRM-1.jpg', alt: 'Riders at dawn before a brevet', href: href('udaipurs-inaugural-brm-event-concluded-with-flying-colors') },
+  { title: 'Expeditions', text: 'From the Thar to the Himalaya.', img: '/uploads/SachPass_UdaipurCyclingClub-19.jpg', alt: 'Rider beside a mountain waterfall', href: '#expeditions' },
+  { title: 'Community', text: 'Cyclothons, club events and workshops.', img: '/uploads/Earth-Hour-Cyclothon-2023-2-1.jpg', alt: 'Club members together at the Earth Hour Cyclothon', href: '/photos/', accent: true },
+];
+
+const expeditions = [
+  { title: 'Sach Pass', where: 'Himachal', img: '/uploads/SachPass_UdaipurCyclingClub-4.jpg', alt: 'UCC team with a banner on the Sach Pass expedition', href: href('sachpass-cycling-expedition-a-test-of-physical-and-mental-strength') },
+  { title: 'Manali to Leh', where: 'Ladakh', img: '/uploads/Udaipur-Cycling-Club-Manali-Leh-Khardungla-Kailash-Sharad-14.jpg', alt: 'UCC riders with a club banner in Leh', href: href('a-bicycling-journey-from-manali-through-leh-to-khardungla') },
+  { title: 'Salangpur Balaji', where: 'Gujarat', img: '/uploads/ucc-udaipur-417km-udaipur-salangpur-balaji-18.jpeg', alt: 'Riders with the Indian flag after the Salangpur ride', href: href('ucc-417-km-cycle-ride-udaipur-salangpur-balaji') },
+];
+
+const footerLinks = [
+  { label: 'About', href: '/about/' },
+  { label: 'Stories', href: '/blogs/' },
+  { label: 'Events', href: '/events/' },
+  { label: 'Challenges', href: '/ucc-challenges/' },
+  { label: 'Photos', href: '/photos/' },
+  { label: 'Code of Conduct', href: '/ucc-code-of-conduct/' },
+  { label: 'Rules', href: '/udaipurcyclingclub-rules-guidelines/' },
+  { label: 'Privacy', href: '/privacy-policy/' },
+  { label: 'Contact', href: '/contact/' },
+];
 ---
-<Base>
-  <section class="hero">
-    <div class="container hero-inner">
-      <div>
-        <span class="eyebrow">Udaipur · Since {site.founded}</span>
-        <h1>{site.tagline}</h1>
-        <p class="lead">{site.description}</p>
-        <div class="actions">
-          <a href="/registration/" class="btn btn-primary">Become a member</a>
-          <a href="/blogs/" class="btn btn-outline">Read our stories</a>
-        </div>
-        <ul class="stats" aria-label="Club at a glance">
-          <li><strong>100+</strong><span>active members</span></li>
-          <li><strong>8</strong><span>signature expeditions</span></li>
-          <li><strong>Daily</strong><span>group rides</span></li>
-        </ul>
-      </div>
-      <div class="hero-art" aria-hidden="true">
-        <img src="/uploads/IMG_4107-1-1.jpg" alt="" width="1280" height="577" fetchpriority="high" />
-      </div>
-    </div>
-  </section>
+<Base bare>
+  <Fragment slot="head">
+    <link href="https://fonts.googleapis.com/css2?family=Onest:wght@300;400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet" />
+    <meta name="theme-color" content="#07090c" />
+  </Fragment>
 
-  <section class="section">
-    <div class="container">
-      <span class="eyebrow">Who we are</span>
-      <div class="two-col">
-        <div>
-          <h2>A close-knit family on two wheels</h2>
+  <div class="og">
+    <!-- HERO -->
+    <section id="home" class="hero">
+      <img class="hero-bg" src="/uploads/SachPass_UdaipurCyclingClub-36.jpg" alt="Switchback road climbing to Sach Pass" fetchpriority="high" />
+      <div class="hero-shade" aria-hidden="true"></div>
+      <header class="top">
+        <a href="/" aria-label={`${site.name} home`}><img src="/logo-horizontal-ondark.png" alt="" width="150" height="110" class="logo" /></a>
+        <nav class="glass pill-nav" aria-label="Sections">
+          <a href="#ride">Ride</a>
+          <a href="#stories">Stories</a>
+          <a href="#expeditions">Expeditions</a>
+          <a href="/about/">About</a>
+          <a href="#join">Join</a>
+        </nav>
+        <a href="/registration/" class="gb gb-light">Become a member</a>
+      </header>
+      <div class="hero-body">
+        <div class="hero-copy">
+          <span class="kicker">{site.name} · since {site.founded}</span>
+          <h1>Ride above <em>it all.</em></h1>
+          <p>From the lakes of Udaipur to the passes of the Himalaya. A club that rides together, every morning.</p>
         </div>
-        <div class="prose">
-          <p>We are a group of passionate cyclists based in Udaipur, with a vision to make our city the biggest cycling hub in India. With over 100+ privileged members, we ride every day, exploring the off-roads and roads of Udaipur and beyond.</p>
-          <p>Our aim is to promote cycling in all forms, be it commuting, leisure, fitness, or sports, and create a community of like-minded individuals who share our love for cycling. We organise regular rides, events and workshops to engage and educate our members on the benefits of cycling and a healthy, sustainable lifestyle.</p>
-          <p>Udaipur Cycling Club was founded in May 2017 by a group of cycling enthusiasts. Since then we have grown into a close-knit family, bonded by our passion for cycling and the outdoors.</p>
-          <p><a href="/about/">More about the club →</a></p>
+        <div class="glass hero-card">
+          <span class="label">Upcoming rides</span>
+          <span class="hero-card-title">Find your next group ride</span>
+          <p>See the live ride calendar, register and check in from the UCC app.</p>
+          <a href={`${site.appUrl}/events.html`} class="gb gb-orange" target="_blank" rel="noopener">Open the ride calendar</a>
         </div>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <section class="section section-alt">
-    <div class="container">
-      <div class="section-head">
-        <div>
-          <span class="eyebrow">Signature expeditions</span>
-          <h2>Rides that define UCC</h2>
+    <!-- RIDE TYPES -->
+    <section id="ride" class="wrap ride-grid">
+      {rideTypes.map((r) => (
+        <a href={r.href} class:list={['tile', { accent: r.accent }]}>
+          <div class="tile-img"><img src={r.img} alt={r.alt} loading="lazy" /></div>
+          <div class="tile-text"><span class="tile-title">{r.title}</span><span class="tile-sub">{r.text}</span></div>
+        </a>
+      ))}
+    </section>
+
+    <!-- STORIES SWITCHER -->
+    <section id="stories" class="stories" data-switcher>
+      {featured.map((f, i) => (
+        <img class:list={['story-bg', { on: i === 0 }]} data-bg={i} src={f.img} alt="" style={`object-position:${f.pos}`} loading={i === 0 ? 'lazy' : 'lazy'} />
+      ))}
+      <div class="stories-shade" aria-hidden="true"></div>
+      <div class="stories-head">
+        <h2>Rider <em>stories</em></h2>
+        <a href="/blogs/" class="link-all">All stories</a>
+      </div>
+      <div class="stories-body">
+        {featured.map((f, i) => (
+          <div class:list={['story-panel', { on: i === 0 }]} data-panel={i} aria-hidden={i === 0 ? undefined : 'true'}>
+            <span class="story-word">{f.word}</span>
+            <div class="glass story-card">
+              <span class="label warm">{f.tag}</span>
+              <span class="story-title">{f.title}</span>
+              <span class="story-text">{f.body}</span>
+              <a href={href(f.slug)} class="gb gb-light">Read the story</a>
+            </div>
+          </div>
+        ))}
+        <div class="glass thumbs" role="tablist" aria-label="Choose a story">
+          {featured.map((f, i) => (
+            <button type="button" role="tab" class:list={['thumb', { on: i === 0 }]} data-thumb={i} aria-selected={i === 0 ? 'true' : 'false'} aria-label={f.title}>
+              <img src={f.img} alt="" loading="lazy" />
+            </button>
+          ))}
         </div>
-        <a href="/signature-cycling-expedition/" class="btn btn-outline btn-sm">All expeditions</a>
+      </div>
+    </section>
+
+    <!-- EXPEDITIONS -->
+    <section id="expeditions" class="wrap exp">
+      <div class="exp-head">
+        <h2>Signature <em>expeditions</em></h2>
+        <a href="/signature-cycling-expedition/" class="link-all">All expeditions</a>
       </div>
       <div class="exp-grid">
         {expeditions.map((e) => (
-          <a href="/signature-cycling-expedition/" class="exp">
-            <img src={e.src} alt={e.title} loading="lazy" width="400" height="300" />
-            <span>{e.title}</span>
+          <a href={e.href} class="tile exp-tile">
+            <div class="tile-img exp-img"><img src={e.img} alt={e.alt} loading="lazy" /></div>
+            <div class="exp-row"><span class="exp-title">{e.title}</span><span class="tile-sub">{e.where}</span></div>
           </a>
         ))}
       </div>
-    </div>
-  </section>
+    </section>
 
-  <section class="section">
-    <div class="container">
-      <div class="section-head">
-        <div>
-          <span class="eyebrow">Inspiring stories</span>
-          <h2>From our riders</h2>
+    <!-- JOIN -->
+    <section id="join" class="join">
+      <img class="join-bg" src="/uploads/Lakecity-200-BRM-1.jpg" alt="Riders gathering at dawn before a brevet" loading="lazy" />
+      <div class="join-shade" aria-hidden="true"></div>
+      <div class="join-body">
+        <h2>Your first ride starts <em>here.</em></h2>
+        <div class="glass join-card">
+          <span class="join-title">Join {site.name}</span>
+          <p>Register as a member to get ride announcements on WhatsApp and access to every club event in the UCC app.</p>
+          <a href="/registration/" class="gb gb-orange">Register as a member</a>
+          <a href={site.whatsapp} class="gb gb-ghost" target="_blank" rel="noopener">WhatsApp the club</a>
         </div>
-        <a href="/blogs/" class="btn btn-outline btn-sm">See all stories</a>
       </div>
-      <div class="grid grid-3">
-        {stories.map((s) => <StoryCard story={s} />)}
-      </div>
-    </div>
-  </section>
+    </section>
 
-  <section class="section section-alt">
-    <div class="container cta-band">
-      <blockquote>
-        “Life is like a bike ride, go as slowly as you want as long as you keep going.”
-      </blockquote>
-      <div class="cta-actions">
-        <a href="/registration/" class="btn btn-primary">Join Udaipur Cycling Club</a>
-        <a href={site.appUrl} class="btn btn-outline" target="_blank" rel="noopener">Open the UCC app</a>
+    <footer class="foot wrap">
+      <div class="foot-top">
+        <img src="/logo-horizontal-ondark.png" alt={site.name} width="150" height="110" class="foot-logo" />
+        <nav aria-label="Footer" class="foot-links">{footerLinks.map((l) => <a href={l.href}>{l.label}</a>)}</nav>
       </div>
-    </div>
-  </section>
+      <div class="foot-bottom">
+        <span>© {new Date().getFullYear()} {site.name}</span>
+        <span class="foot-contact">
+          <a href={`mailto:${site.email}`}>{site.email}</a>
+          <a href={site.social.instagram} target="_blank" rel="noopener">Instagram</a>
+          <a href={site.social.facebook} target="_blank" rel="noopener">Facebook</a>
+          <a href={site.social.youtube} target="_blank" rel="noopener">YouTube</a>
+          <a href={site.appUrl} target="_blank" rel="noopener">UCC app</a>
+        </span>
+      </div>
+    </footer>
+
+    <nav class="glass dock" aria-label="Quick links">
+      <a href="#home" class="dock-on">Home</a><a href="#stories">Stories</a><a href="#expeditions">Expeditions</a><a href="#join">Join</a>
+    </nav>
+  </div>
 </Base>
 
+<script>
+  document.querySelectorAll<HTMLElement>('[data-switcher]').forEach((root) => {
+    const thumbs = root.querySelectorAll<HTMLButtonElement>('[data-thumb]');
+    const set = (i: string) => {
+      root.querySelectorAll<HTMLElement>('[data-bg]').forEach((el) => el.classList.toggle('on', el.dataset.bg === i));
+      root.querySelectorAll<HTMLElement>('[data-panel]').forEach((el) => {
+        const on = el.dataset.panel === i;
+        el.classList.toggle('on', on);
+        if (on) el.removeAttribute('aria-hidden'); else el.setAttribute('aria-hidden', 'true');
+      });
+      thumbs.forEach((t) => {
+        const on = t.dataset.thumb === i;
+        t.classList.toggle('on', on);
+        t.setAttribute('aria-selected', on ? 'true' : 'false');
+      });
+    };
+    thumbs.forEach((t) => t.addEventListener('click', () => set(t.dataset.thumb!)));
+  });
+</script>
+
 <style>
-  .hero { padding: clamp(40px, 7vw, 88px) 0 clamp(32px, 6vw, 72px); overflow: hidden; }
-  .hero-inner { display: grid; grid-template-columns: 1.1fr 1fr; gap: 40px; align-items: center; }
-  .actions { display: flex; gap: 12px; flex-wrap: wrap; margin: 24px 0 32px; }
-  .stats { list-style: none; margin: 0; padding: 0; display: flex; gap: 28px; flex-wrap: wrap; }
-  .stats li { display: flex; flex-direction: column; }
-  .stats strong { font-family: var(--font-display); font-size: 1.6rem; font-weight: 800; }
-  .stats span { color: var(--muted); font-size: 0.9rem; }
-  .hero-art img { border-radius: 20px; box-shadow: var(--shadow); object-fit: cover; aspect-ratio: 4 / 3; width: 100%; }
-  .two-col { display: grid; grid-template-columns: 1fr 1.6fr; gap: 40px; }
-  .section-head { display: flex; justify-content: space-between; align-items: end; gap: 16px; margin-bottom: 28px; flex-wrap: wrap; }
-  .section-head h2 { margin: 0; }
-  .exp-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 16px; }
-  .exp { display: flex; flex-direction: column; gap: 10px; background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 14px; transition: transform 0.2s; }
-  .exp:hover { transform: translateY(-3px); }
-  .exp img { aspect-ratio: 1; object-fit: contain; width: 100%; }
-  .exp span { font-weight: 700; font-size: 0.95rem; text-align: center; color: var(--ink); }
-  .cta-band { text-align: center; }
-  .cta-band blockquote { margin: 0 auto 24px; font-family: var(--font-display); font-weight: 800; font-size: clamp(1.3rem, 3vw, 2rem); max-width: 28ch; line-height: 1.3; }
-  .cta-actions { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
-  @media (max-width: 860px) { .hero-inner, .two-col { grid-template-columns: 1fr; } .hero-art { order: -1; } }
+  :global(body.bare) { background: #07090c; color: #f3f5f8; }
+  .og { --ink: #f3f5f8; --bg: #07090c; --dim: rgba(255,255,255,.72); --line: rgba(255,255,255,.12); --orange: #f7941d;
+    font-family: 'Onest', system-ui, sans-serif; color: var(--ink); background: var(--bg); position: relative; display: flex; flex-direction: column; }
+  .og a:hover { color: inherit; opacity: .88; }
+  .og h1, .og h2 { font-family: 'Onest', system-ui, sans-serif; font-weight: 600; letter-spacing: -.05em; margin: 0; }
+  .og em { font-family: 'Instrument Serif', serif; font-style: italic; font-weight: 400; letter-spacing: -.02em; }
+  .wrap { padding-left: clamp(16px, 3vw, 40px); padding-right: clamp(16px, 3vw, 40px); }
+  .glass { background: rgba(22,26,34,.45); backdrop-filter: blur(36px) saturate(170%); -webkit-backdrop-filter: blur(36px) saturate(170%);
+    border: 1px solid rgba(255,255,255,.18); box-shadow: inset 0 1px 0 rgba(255,255,255,.28), 0 30px 70px rgba(0,0,0,.35); }
+  .label { font-size: 13px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: rgba(255,255,255,.75); }
+  .label.warm { color: #ffcf9e; }
+  .gb { border: 0; display: inline-flex; align-items: center; justify-content: center; padding: 14px 22px; border-radius: 999px; font-weight: 700; font-size: 15px; text-align: center; }
+  .gb-light { background: var(--ink); color: var(--bg) !important; }
+  .gb-orange { background: var(--orange); color: #2b1100 !important; }
+  .gb-ghost { border: 1px solid rgba(255,255,255,.3); color: var(--ink); }
+  .link-all { padding: 12px 18px; border-radius: 999px; border: 1px solid var(--line); font-size: 14px; font-weight: 600; }
+
+  /* Hero */
+  .hero { position: relative; min-height: min(940px, 100svh); overflow: hidden; display: flex; flex-direction: column; }
+  .hero-bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; animation: kb 20s ease-out forwards; }
+  .hero-shade { position: absolute; inset: 0; background: linear-gradient(180deg, rgba(7,9,12,.75) 0%, rgba(7,9,12,.25) 35%, rgba(7,9,12,.45) 70%, #07090c 100%); }
+  @keyframes kb { from { transform: scale(1.03); } to { transform: scale(1.12); } }
+  .top { position: relative; z-index: 2; display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 22px clamp(16px, 3vw, 40px); flex-wrap: wrap; }
+  .logo { height: 44px; width: auto; }
+  .pill-nav { display: flex; gap: 2px; padding: 6px; border-radius: 999px; font-size: 14px; font-weight: 500; box-shadow: inset 0 1px 0 rgba(255,255,255,.22); }
+  .pill-nav a { padding: 10px 16px; border-radius: 999px; }
+  .pill-nav a:hover { background: rgba(255,255,255,.1); opacity: 1; }
+  .hero-body { position: relative; flex: 1; display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 24px; align-items: end; padding: 40px clamp(16px, 3vw, 40px) 72px; }
+  .hero-copy { grid-column: span 7; display: flex; flex-direction: column; gap: 20px; }
+  .kicker { font-size: 15px; font-weight: 500; color: rgba(255,255,255,.82); }
+  .hero h1 { font-size: clamp(56px, 8.4vw, 120px); line-height: .88; }
+  .hero-copy p { margin: 0; font-size: clamp(17px, 1.5vw, 20px); line-height: 1.5; max-width: 42ch; color: rgba(255,255,255,.86); }
+  .hero-card { grid-column: span 5; padding: 26px; border-radius: 34px; display: flex; flex-direction: column; gap: 14px; }
+  .hero-card-title { font-size: 32px; font-weight: 600; letter-spacing: -.03em; line-height: 1.05; }
+  .hero-card p { margin: 0; color: var(--dim); font-size: 16px; line-height: 1.5; }
+
+  /* Ride types */
+  .ride-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; padding-top: 40px; padding-bottom: 120px; }
+  .tile { padding: 12px; border-radius: 30px; background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.1); box-shadow: inset 0 1px 0 rgba(255,255,255,.12); display: flex; flex-direction: column; gap: 14px; }
+  .tile.accent { background: rgba(247,148,29,.12); border-color: rgba(247,148,29,.32); }
+  .tile-img { border-radius: 20px; overflow: hidden; aspect-ratio: 4 / 3; }
+  .tile-img img { width: 100%; height: 100%; object-fit: cover; transition: transform .5s; }
+  .tile:hover .tile-img img { transform: scale(1.04); }
+  .tile-text { padding: 0 10px 12px; display: flex; flex-direction: column; gap: 6px; }
+  .tile-title { font-size: 22px; font-weight: 600; }
+  .tile-sub { font-size: 14px; color: var(--dim); line-height: 1.5; }
+  .tile.accent .tile-sub { color: #ffdcb8; }
+
+  /* Stories */
+  .stories { position: relative; min-height: 820px; overflow: hidden; display: flex; flex-direction: column; justify-content: space-between; padding: 40px clamp(16px, 3vw, 40px) 48px; }
+  .story-bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: opacity .7s ease; }
+  .story-bg.on { opacity: 1; }
+  .stories-shade { position: absolute; inset: 0; background: linear-gradient(180deg, #07090c 0%, rgba(7,9,12,.2) 25%, rgba(7,9,12,.35) 60%, rgba(7,9,12,.95) 100%); }
+  .stories-head, .exp-head { position: relative; display: flex; justify-content: space-between; align-items: flex-end; gap: 16px; flex-wrap: wrap; }
+  .stories h2, .exp h2 { font-size: clamp(44px, 5vw, 64px); line-height: 1; }
+  .stories-body { position: relative; display: flex; flex-direction: column; gap: 28px; margin-top: 260px; }
+  .story-panel { display: none; grid-template-columns: minmax(0, 1fr) minmax(0, 520px); gap: 32px; align-items: end; }
+  .story-panel.on { display: grid; animation: rise .5s ease-out; }
+  @keyframes rise { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
+  .story-word { font-family: 'Instrument Serif', serif; font-size: clamp(96px, 14vw, 200px); line-height: .8; letter-spacing: -.03em; }
+  .story-card { padding: 28px; border-radius: 32px; display: flex; flex-direction: column; gap: 12px; align-items: flex-start; }
+  .story-title { font-size: 32px; font-weight: 600; letter-spacing: -.03em; line-height: 1.08; }
+  .story-text { font-size: 16px; line-height: 1.55; color: rgba(255,255,255,.84); }
+  .thumbs { align-self: flex-start; display: flex; gap: 10px; padding: 8px; border-radius: 26px; max-width: 100%; overflow-x: auto; }
+  .thumb { flex: 0 0 auto; width: 120px; height: 76px; padding: 0; border-radius: 16px; overflow: hidden; border: 2px solid transparent; background: #111; cursor: pointer; transition: transform .2s, border-color .2s; }
+  .thumb img { width: 100%; height: 100%; object-fit: cover; opacity: .6; }
+  .thumb.on { border-color: #ffcf9e; }
+  .thumb.on img, .thumb:hover img { opacity: 1; }
+  .thumb:hover { transform: translateY(-3px); }
+
+  /* Expeditions */
+  .exp { padding-top: 120px; padding-bottom: 120px; display: flex; flex-direction: column; gap: 28px; }
+  .exp-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+  .exp-tile { padding: 10px; border-radius: 32px; }
+  .exp-img { border-radius: 24px; }
+  .exp-row { padding: 0 12px 14px; display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+  .exp-title { font-size: 22px; font-weight: 600; }
+
+  /* Join */
+  .join { position: relative; min-height: 720px; overflow: hidden; display: flex; align-items: center; padding: 80px clamp(16px, 3vw, 40px) 140px; }
+  .join-bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+  .join-shade { position: absolute; inset: 0; background: linear-gradient(90deg, rgba(7,9,12,.88), rgba(7,9,12,.3)); }
+  .join-body { position: relative; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 480px); gap: 48px; width: 100%; align-items: center; }
+  .join h2 { font-size: clamp(56px, 7vw, 96px); line-height: .9; }
+  .join-card { padding: 30px; border-radius: 34px; display: flex; flex-direction: column; gap: 14px; }
+  .join-title { font-size: 24px; font-weight: 600; letter-spacing: -.02em; }
+  .join-card p { margin: 0; color: var(--dim); line-height: 1.55; }
+
+  /* Footer + dock */
+  .foot { padding-top: 40px; padding-bottom: 120px; display: flex; flex-direction: column; gap: 28px; border-top: 1px solid var(--line); }
+  .foot-top { display: flex; justify-content: space-between; align-items: center; gap: 24px; flex-wrap: wrap; }
+  .foot-logo { height: 40px; width: auto; }
+  .foot-links { display: flex; gap: 6px 22px; flex-wrap: wrap; font-size: 14px; color: var(--dim); }
+  .foot-bottom { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; font-size: 13px; color: rgba(255,255,255,.55); }
+  .foot-contact { display: flex; gap: 16px; flex-wrap: wrap; }
+  .dock { position: fixed; left: 50%; bottom: 20px; transform: translateX(-50%); z-index: 30; display: flex; gap: 4px; padding: 6px; border-radius: 999px; font-size: 14px; font-weight: 600; }
+  .dock a { padding: 12px 18px; border-radius: 999px; }
+  .dock a:hover { background: rgba(255,255,255,.1); opacity: 1; }
+  .dock .dock-on { background: rgba(255,255,255,.9); color: #07090c; }
+
+  @media (max-width: 1000px) {
+    .hero-copy, .hero-card { grid-column: span 12; }
+    .ride-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .exp-grid { grid-template-columns: 1fr; }
+    .story-panel { grid-template-columns: 1fr; }
+    .join-body { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 720px) {
+    .pill-nav { display: none; }
+    .top .gb { padding: 11px 16px; font-size: 14px; }
+    .ride-grid { grid-template-columns: 1fr; padding-bottom: 72px; }
+    .stories { min-height: 0; }
+    .stories-body { margin-top: 120px; }
+    .story-title { font-size: 26px; }
+    .exp { padding-top: 72px; padding-bottom: 72px; }
+    .dock a { padding: 11px 13px; font-size: 13px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .hero-bg, .story-panel.on { animation: none; }
+    .story-bg, .tile-img img { transition: none; }
+  }
 </style>
