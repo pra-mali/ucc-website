@@ -57,21 +57,14 @@ const footerLinks = [
           <a href="#stories">Stories</a>
           <a href="#expeditions">Expeditions</a>
           <a href="/about/">About</a>
-          <a href="#join">Join</a>
+          <a href="/registration/">Join</a>
         </nav>
-        <a href="/registration/" class="gb gb-light">Become a member</a>
       </header>
       <div class="hero-body">
         <div class="hero-copy">
           <span class="kicker">{site.name} · since {site.founded}</span>
           <h1>Ride above <em>it all.</em></h1>
           <p>From the lakes of Udaipur to the passes of the Himalaya. A club that rides together, every morning.</p>
-        </div>
-        <div class="glass hero-card">
-          <span class="label">Upcoming rides</span>
-          <span class="hero-card-title">Find your next group ride</span>
-          <p>See the live ride calendar, register and check in from the UCC app.</p>
-          <a href={`${site.appUrl}/events.html`} class="gb gb-orange" target="_blank" rel="noopener">Open the ride calendar</a>
         </div>
       </div>
     </section>
@@ -134,20 +127,6 @@ const footerLinks = [
       </div>
     </section>
 
-    <!-- JOIN -->
-    <section id="join" class="join">
-      <img class="join-bg" src="/uploads/Lakecity-200-BRM-1.jpg" alt="Riders gathering at dawn before a brevet" loading="lazy" />
-      <div class="join-shade" aria-hidden="true"></div>
-      <div class="join-body">
-        <h2>Your first ride starts <em>here.</em></h2>
-        <div class="glass join-card">
-          <span class="join-title">Join {site.name}</span>
-          <p>Register as a member to get ride announcements on WhatsApp and access to every club event in the UCC app.</p>
-          <a href="/registration/" class="gb gb-orange">Register as a member</a>
-          <a href={site.whatsapp} class="gb gb-ghost" target="_blank" rel="noopener">WhatsApp the club</a>
-        </div>
-      </div>
-    </section>
 
     <footer class="foot wrap">
       <div class="foot-top">
@@ -166,9 +145,6 @@ const footerLinks = [
       </div>
     </footer>
 
-    <nav class="glass dock" aria-label="Quick links">
-      <a href="#home" class="dock-on">Home</a><a href="#stories">Stories</a><a href="#expeditions">Expeditions</a><a href="#join">Join</a>
-    </nav>
   </div>
 </Base>
 
@@ -221,7 +197,7 @@ const footerLinks = [
   .pill-nav a { padding: 10px 16px; border-radius: 999px; }
   .pill-nav a:hover { background: rgba(255,255,255,.1); opacity: 1; }
   .hero-body { position: relative; flex: 1; display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 24px; align-items: end; padding: 40px clamp(16px, 3vw, 40px) 72px; }
-  .hero-copy { grid-column: span 7; display: flex; flex-direction: column; gap: 20px; }
+  .hero-copy { grid-column: span 9; display: flex; flex-direction: column; gap: 20px; }
   .kicker { font-size: 15px; font-weight: 500; color: rgba(255,255,255,.82); }
   .hero h1 { font-size: clamp(56px, 8.4vw, 120px); line-height: .88; }
   .hero-copy p { margin: 0; font-size: clamp(17px, 1.5vw, 20px); line-height: 1.5; max-width: 42ch; color: rgba(255,255,255,.86); }
@@ -282,7 +258,7 @@ const footerLinks = [
   .join-card p { margin: 0; color: var(--dim); line-height: 1.55; }
 
   /* Footer + dock */
-  .foot { padding-top: 40px; padding-bottom: 120px; display: flex; flex-direction: column; gap: 28px; border-top: 1px solid var(--line); }
+  .foot { padding-top: 40px; padding-bottom: 40px; display: flex; flex-direction: column; gap: 28px; border-top: 1px solid var(--line); }
   .foot-top { display: flex; justify-content: space-between; align-items: center; gap: 24px; flex-wrap: wrap; }
   .foot-logo { height: 40px; width: auto; }
   .foot-links { display: flex; gap: 6px 22px; flex-wrap: wrap; font-size: 14px; color: var(--dim); }
