@@ -1,8 +1,9 @@
 ---
+import { breadcrumbs } from '../data/seo';
 import Base from '../layouts/Base.astro';
 import expeditions from '../data/expeditions.json';
 ---
-<Base title="Signature Cycling Expeditions" description="UCC's signature rides: Cyclorun, Jodhpur Night Ride, Statue of Unity, Jaisalmer, Sita Mata Sanctuary, TAAVDO, Tour de Diu and the Udaipur Duathlon.">
+<Base title="Signature Cycling Expeditions" description="UCC's signature rides: Cyclorun, Jodhpur Night Ride, Statue of Unity, Jaisalmer, Sita Mata Sanctuary, TAAVDO, Tour de Diu and the Udaipur Duathlon." pageType="CollectionPage" jsonLd={[breadcrumbs([{ name: 'Home', path: '/' }, { name: 'Signature Cycling Expeditions', path: '/signature-cycling-expedition/' }])]}>
   <section class="page-hero">
     <div class="container">
       <span class="eyebrow">Signature expeditions</span>

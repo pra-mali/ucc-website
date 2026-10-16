@@ -7,6 +7,7 @@ import Base from '../layouts/Base.astro';
 import StoryCard from '../components/StoryCard.astro';
 import { getCollection, render } from 'astro:content';
 import { site } from '../data/site';
+import { article, breadcrumbs, isHindi } from '../data/seo';
 
 export async function getStaticPaths() {
   const stories = await getCollection('stories', ({ data }) => !data.draft);
@@ -32,13 +33,28 @@ const html = d.html
   : null;
 const dateStr = isStory ? d.date.toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' }) : '';
 const shareUrl = new URL(Astro.url.pathname, Astro.site).toString();
+const lang = isHindi(d.title + ' ' + (d.excerpt || '')) ? 'hi' : 'en';
+const description = isStory ? d.excerpt || site.description : d.description || `${d.title} – ${site.name}`;
+const words = html ? html.replace(/<[^>]+>/g, ' ').split(/\s+/).filter(Boolean).length : undefined;
+const crumbs = isStory
+  ? breadcrumbs([{ name: 'Home', path: '/' }, { name: 'Stories', path: '/blogs/' }, { name: d.title, path: Astro.url.pathname }])
+  : breadcrumbs([{ name: 'Home', path: '/' }, { name: d.title, path: Astro.url.pathname }]);
+const jsonLd = isStory
+  ? [article({ path: Astro.url.pathname, title: d.title, description, image: d.cover, date: d.date, updated: d.updated, author: d.author, categories: d.categories, tags: d.tags, lang, wordCount: words }), crumbs]
+  : [crumbs];
+const pageType = !isStory && /about/.test(Astro.url.pathname) ? 'AboutPage' : 'WebPage';
 ---
 <Base
   title={d.title}
-  description={isStory ? d.excerpt || site.description : d.description || `${d.title} – ${site.name}`}
+  description={description}
   image={isStory ? d.cover : null}
   type={isStory ? 'article' : 'website'}
   publishedTime={isStory ? d.date : undefined}
+  modifiedTime={isStory ? d.updated || d.date : undefined}
+  imageAlt={isStory ? d.coverAlt || d.title : undefined}
+  lang={lang}
+  pageType={pageType}
+  jsonLd={jsonLd}
 >
   {isStory ? (
     <article>

@@ -1,4 +1,49 @@
+# Udaipur Cycling Club — https://udaipurcycling.club
+# Everyone is welcome to crawl and cite the club's public pages and stories.
+
 User-agent: *
+Allow: /
+Disallow: /admin/
+
+# Search engines
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+# AI search and assistants (explicitly allowed so the club shows up in AI answers)
+User-agent: Google-Extended
+Allow: /
+
+User-agent: GPTBot
+Allow: /
+
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: Claude-SearchBot
+Allow: /
+
+User-agent: Claude-User
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Perplexity-User
+Allow: /
+
+User-agent: Applebot-Extended
+Allow: /
+
+User-agent: CCBot
 Allow: /
 
 Sitemap: https://udaipurcycling.club/sitemap-index.xml

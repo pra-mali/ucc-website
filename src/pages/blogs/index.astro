@@ -2,12 +2,29 @@
 import Base from '../../layouts/Base.astro';
 import StoryCard from '../../components/StoryCard.astro';
 import { getCollection } from 'astro:content';
+import { breadcrumbs } from '../../data/seo';
 
 const stories = (await getCollection('stories', ({ data }) => !data.draft))
   .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
 const categories = [...new Set(stories.flatMap((s) => s.data.categories))].sort();
+const site = Astro.site!;
+const jsonLd = [
+  breadcrumbs([{ name: 'Home', path: '/' }, { name: 'Stories', path: '/blogs/' }]),
+  {
+    '@type': 'ItemList',
+    name: 'Udaipur Cycling Club rider stories',
+    itemListOrder: 'https://schema.org/ItemListOrderDescending',
+    numberOfItems: stories.length,
+    itemListElement: stories.map((s, i) => ({
+      '@type': 'ListItem',
+      position: i + 1,
+      url: new URL(`/${s.data.slug || s.id}/`, site).toString(),
+      name: s.data.title,
+    })),
+  },
+];
 ---
-<Base title="Inspiring Stories" description="Ride reports, member achievements, expeditions and newsletters from Udaipur Cycling Club riders.">
+<Base title="Inspiring Stories" description="Ride reports, member achievements, expeditions and newsletters from Udaipur Cycling Club riders." pageType="CollectionPage" jsonLd={jsonLd}>
   <section class="page-hero">
     <div class="container">
       <span class="eyebrow">Inspiring stories</span>

@@ -1,8 +1,9 @@
 ---
+import { breadcrumbs } from '../data/seo';
 import Base from '../layouts/Base.astro';
 import photos from '../data/photos.json';
 ---
-<Base title="Photos" description="Photo gallery from Udaipur Cycling Club rides, expeditions and events.">
+<Base title="Photos" description="Photo gallery from Udaipur Cycling Club rides, expeditions and events." pageType="CollectionPage" jsonLd={[breadcrumbs([{ name: 'Home', path: '/' }, { name: 'Photos', path: '/photos/' }])]}>
   <section class="page-hero">
     <div class="container">
       <span class="eyebrow">Gallery</span>

@@ -1,9 +1,10 @@
 ---
+import { breadcrumbs } from '../data/seo';
 import Base from '../layouts/Base.astro';
 import { site } from '../data/site';
 const mapQuery = encodeURIComponent('Bhopalpura, Udaipur, Rajasthan 313001');
 ---
-<Base title="Contact" description="Get in touch with Udaipur Cycling Club by email or WhatsApp.">
+<Base title="Contact" description="Get in touch with Udaipur Cycling Club by email or WhatsApp." pageType="ContactPage" jsonLd={[breadcrumbs([{ name: 'Home', path: '/' }, { name: 'Contact', path: '/contact/' }])]}>
   <section class="page-hero">
     <div class="container">
       <span class="eyebrow">Contact</span>

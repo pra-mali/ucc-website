@@ -6,5 +6,11 @@ export default defineConfig({
   site: 'https://udaipurcycling.club',
   trailingSlash: 'always',
   build: { format: 'directory' },
-  integrations: [sitemap()],
+  integrations: [
+    sitemap({
+      filter: (page) => !/\/(404|admin)\/?$/.test(page),
+      changefreq: 'weekly',
+      lastmod: new Date(),
+    }),
+  ],
 });

@@ -1,8 +1,9 @@
 ---
+import { breadcrumbs } from '../data/seo';
 import Base from '../layouts/Base.astro';
 import { site } from '../data/site';
 ---
-<Base title="Member Registration" description="Join Udaipur Cycling Club. Register as a member to ride with the biggest cycling community in Udaipur.">
+<Base title="Member Registration" description="Join Udaipur Cycling Club. Register as a member to ride with the biggest cycling community in Udaipur." pageType="WebPage" jsonLd={[breadcrumbs([{ name: 'Home', path: '/' }, { name: 'Member Registration', path: '/registration/' }])]}>
   <section class="page-hero">
     <div class="container narrow">
       <span class="eyebrow">Join us</span>
