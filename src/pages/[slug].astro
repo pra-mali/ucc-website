@@ -58,10 +58,10 @@ const pageType = !isStory && /about/.test(Astro.url.pathname) ? 'AboutPage' : 'W
 >
   {isStory ? (
     <article>
-      <header class:list={['story-head', { 'has-cover': d.cover, 'page-hero': !d.cover }]}>
+      <header class:list={['story-head', { 'has-cover': d.cover, 'on-photo': d.cover, 'page-hero': !d.cover }]}>
         {d.cover && <img src={d.cover} alt={d.coverAlt || ''} class="cover" width="1600" height="900" fetchpriority="high" />}
         {d.cover && <div class="shade" aria-hidden="true"></div>}
-        <div class="container narrow head-copy">
+        <div class="container narrow head-copy photo-copy">
           <div class="meta">
             {d.categories.map((c: string) => <span class="chip chip-orange">{c}</span>)}
             <time datetime={d.date.toISOString()}>{dateStr}</time>
@@ -116,15 +116,15 @@ const pageType = !isStory && /about/.test(Astro.url.pathname) ? 'AboutPage' : 'W
   .story-head .lead { margin: 0; }
   .has-cover { position: relative; min-height: min(78svh, 720px); display: flex; align-items: flex-end; overflow: hidden; padding: 120px 0 clamp(32px, 5vw, 56px); }
   .has-cover .cover { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; animation: kb 20s ease-out forwards; }
-  .has-cover .shade { position: absolute; inset: 0; background: linear-gradient(180deg, rgba(7, 9, 12, 0.55) 0%, rgba(7, 9, 12, 0.15) 30%, rgba(7, 9, 12, 0.6) 65%, #07090c 100%); }
+  .has-cover .shade { position: absolute; inset: 0; background: linear-gradient(180deg, rgba(var(--scrim), 0.55) 0%, rgba(var(--scrim), 0.15) 30%, rgba(var(--scrim), 0.6) 65%, var(--shade-edge) 100%); }
   .has-cover .head-copy { position: relative; width: 100%; }
-  .has-cover .lead { color: rgba(255, 255, 255, 0.88); }
+  .has-cover .lead { color: rgba(var(--on-photo), 0.88); }
   @keyframes kb { from { transform: scale(1.02); } to { transform: scale(1.1); } }
   .body { padding: 32px 0 8px; max-width: none; }
   .share { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; border-top: 1px solid var(--line); margin-top: 40px; padding-top: 20px; font-weight: 600; font-size: 14px; }
   .share .muted { margin-right: 6px; font-size: 13px; letter-spacing: 0.06em; text-transform: uppercase; }
-  .share a { padding: 9px 16px; border-radius: 999px; border: 1px solid rgba(255, 255, 255, 0.2); }
-  .share a:hover { background: var(--orange); border-color: var(--orange); color: #2b1100; }
+  .share a { padding: 9px 16px; border-radius: 999px; border: 1px solid var(--line-strong); }
+  .share a:hover { background: var(--orange); border-color: var(--orange); color: var(--on-brand); }
   .section-alt { margin-top: clamp(48px, 7vw, 80px); }
   @media (max-width: 600px) { .has-cover { min-height: min(72svh, 620px); padding-top: 96px; } }
   @media (prefers-reduced-motion: reduce) { .has-cover .cover { animation: none; } }

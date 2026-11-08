@@ -43,7 +43,7 @@ const pageNode = type === 'article' ? null : {
 const ld = noindex ? null : JSON.stringify(graph([organization(), website(), pageNode, ...jsonLd])).replace(/</g, '\\u003c');
 ---
 <!doctype html>
-<html lang={lang}>
+<html lang={lang} data-theme="light">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -56,7 +56,8 @@ const ld = noindex ? null : JSON.stringify(graph([organization(), website(), pag
     <link rel="icon" href="/favicon.png" type="image/png" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <link rel="sitemap" href="/sitemap-index.xml" />
-    <meta name="theme-color" content="#07090c" />
+    <meta name="theme-color" content="#f3f5f4" />
+    <script is:inline>(function(){try{var t='light';try{if(localStorage.getItem('ucc-theme')==='dark')t='dark'}catch(e){}document.documentElement.setAttribute('data-theme',t);if(t==='dark')document.querySelector('meta[name="theme-color"]').content='#07090c'}catch(e){}})()</script>
     <meta property="og:site_name" content={site.name} />
     <meta property="og:type" content={type} />
     <meta property="og:title" content={title || site.name} />
